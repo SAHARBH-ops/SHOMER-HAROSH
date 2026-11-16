@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>שומר הראש – הגנה מהונאות ועוקצים להורים באייפון</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --primary: #1d4ed8;
+      --primary-hover: #1e40af;
+      --danger: #dc2626;
+      --danger-bg: #fef2f2;
+      --safe: #16a34a;
+      --safe-bg: #f0fdf4;
+      --border: #e2e8f0;
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Heebo', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    header {
+      padding: 20px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge {
+      background: #dbeafe;
+      color: var(--primary);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 40px 0 60px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .hero { grid-template-columns: 1fr; text-align: center; padding: 24px 0 40px; }
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 2.9rem);
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .btn {
+      display: inline-block;
+      background: var(--primary);
+      color: #fff;
+      font-size: 1.15rem;
+      font-weight: 700;
+      padding: 16px 28px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.15s, background 0.15s;
+    }
+
+    .btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-outline:hover { background: #eff6ff; }
+
+    /* Interactive Phone Mockup */
+    .phone-mockup {
+      background: #0f172a;
+      border-radius: 36px;
+      padding: 14px;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
+      max-width: 340px;
+      margin: 0 auto;
+    }
+
+    .phone-screen {
+      background: #ffffff;
+      border-radius: 26px;
+      padding: 20px 16px;
+      min-height: 430px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-align: center;
+    }
+
+    .sms-box {
+      background: #f1f5f9;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 0.92rem;
+      text-align: right;
+      border-right: 4px solid #94a3b8;
+      margin-bottom: 14px;
+    }
+
+    .result-card {
+      padding: 18px 14px;
+      border-radius: 16px;
+      margin-top: 10px;
+      transition: all 0.25s ease;
+    }
+
+    .result-danger {
+      background: var(--danger-bg);
+      border: 2px solid var(--danger);
+      color: #991b1b;
+    }
+
+    .result-safe {
+      background: var(--safe-bg);
+      border: 2px solid var(--safe);
+      color: #166534;
+    }
+
+    .result-title {
+      font-size: 1.35rem;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .call-family-btn {
+      margin-top: 12px;
+      width: 100%;
+      background: var(--danger);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .demo-switch {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .demo-switch button {
+      flex: 1;
+      padding: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      cursor: pointer;
+    }
+
+    /* Features */
+    .features {
+      padding: 40px 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--surface);
+      padding: 28px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+
+    .card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .card p { color: var(--muted); }
+
+    /* Pricing (Fake Door Test) */
+    .pricing-section {
+      padding: 50px 0 70px;
+      text-align: center;
+    }
+
+    .pricing-section h2 {
+      font-size: 2rem;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px;
+      margin-top: 32px;
+    }
+
+    .price-card {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 30px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .price-card.featured {
+      border-color: var(--primary);
+      box-shadow: 0 12px 30px rgba(29, 78, 216, 0.12);
+      position: relative;
+    }
+
+    .ribbon {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 999px;
+    }
+
+    .price {
+      font-size: 2.3rem;
+      font-weight: 900;
+      margin: 14px 0 6px;
+    }
+
+    .price span { font-size: 1rem; font-weight: 400; color: var(--muted); }
+
+    .price-card ul {
+      list-style: none;
+      margin: 18px 0 26px;
+      text-align: right;
+    }
+
+    .price-card li {
+      padding: 6px 0;
+      color: var(--muted);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 100;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal {
+      background: #fff;
+      border-radius: 20px;
+      max-width: 440px;
+      width: 100%;
+      padding: 32px 26px;
+      position: relative;
+      text-align: right;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--muted);
+    }
+
+    .modal input {
+      width: 100%;
+      padding: 14px;
+      font-size: 1.05rem;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      margin: 12px 0 16px;
+      font-family: inherit;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border);
+    }
+    .onboarding-panel { margin-top: 16px; padding: 18px; border: 1px solid var(--border); border-radius: 14px; background: #eff6ff; }
+    .onboarding-panel h4 { margin-bottom: 8px; font-size: 1.15rem; }
+    .setup-steps { margin: 14px 0 0; padding-right: 22px; }
+    .setup-steps li { margin: 8px 0; }
+    .legal-footer { margin-top: 36px; padding: 24px; border-top: 1px solid var(--border); background: #fff; border-radius: 14px; color: var(--muted); font-size: .95rem; }
+    .legal-footer h2 { color: var(--text); font-size: 1.2rem; margin-bottom: 10px; }
+    .legal-footer p + p { margin-top: 10px; }
+    .free-note { margin-top:12px !important; font-size:1rem !important; }
+    .free-note a { color:var(--primary); font-weight:800; }
+    .ios-preview { min-height:470px; background:linear-gradient(180deg,#172033 0%,#263650 100%); color:#fff; border:1px solid #53627a; overflow:hidden; position:relative; }
+    .ios-status { display:flex; justify-content:space-between; direction:ltr; font-size:.78rem; font-weight:700; padding:0 4px; }
+    .ios-notification { text-align:right; background:rgba(248,250,252,.94); color:#1e293b; border-radius:15px; padding:14px; margin:22px 0 0; box-shadow:0 8px 22px #0005; font-size:.9rem; }
+    .ios-notification-top { display:flex; justify-content:space-between; color:#64748b; font-size:.78rem; margin-bottom:5px; }
+    .ios-alert-wrap { padding:18px 0; }
+    .ios-alert { color:#fff; border-radius:20px; padding:20px 16px; background:rgba(30,30,32,.97); border:1px solid #ffffff35; box-shadow:0 14px 36px #0008; text-align:center; backdrop-filter:blur(16px); }
+    .ios-alert.result-danger { border-color:#ef4444; }
+    .ios-alert.result-safe { border-color:#22c55e; }
+    .ios-alert .result-title { color:#fff; font-size:1.28rem; }
+    .ios-alert #resultDesc { color:#e2e8f0; font-size:.94rem; }
+    .ios-alert .call-family-btn { background:#dc2626; }
+    .ios-alert.result-safe .call-family-btn { display:none !important; }
+    .ios-home-indicator { width:92px; height:5px; border-radius:99px; background:#fff; margin:2px auto 0; }
+    .demo-switch button { background:#263246; color:#fff; border-color:#64748b; }
+    .shortcuts-guide { padding:32px 0; }
+    .shortcuts-guide h2 { font-size:clamp(1.6rem,3vw,2.1rem); margin-bottom:8px; }
+    .guide-intro { color:var(--muted); margin-bottom:18px; }
+    .guide-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+    .guide-step { background:#fff; border:1px solid var(--border); border-radius:16px; padding:20px; }
+    .step-number { display:grid; place-items:center; width:38px; height:38px; border-radius:50%; background:#dbeafe; color:#1e40af; font-weight:900; margin-bottom:10px; }
+    .guide-step h3 { margin-bottom:8px; }
+    .guide-step p,.permission-note { color:var(--muted); }
+    .permission-note { padding:14px 16px; background:#eff6ff; border-radius:12px; margin-top:16px; }
+    @media (max-width:768px) { .guide-grid { grid-template-columns:1fr; } .ios-preview { max-width:360px; width:100%; margin-inline:auto; } .hero p { font-size:1.08rem; } }
+    @media (max-width:420px) { .container { padding:0 14px; } .phone-mockup { border-radius:28px; padding:9px; } .ios-preview { min-height:440px; border-radius:21px; padding:16px 12px; } .btn { max-width:100%; } }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="logo">🛡️ שומר הראש</div>
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <span class="badge">כלי חכם לקיצורי דרך באייפון</span>
+        <a href="/pro" style="font-weight:700; color:var(--primary); text-decoration:none;">יש לכם קוד מנוי? / שדרוג ל-PRO</a>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div>
+        <h1>הגנה חכמה מהונאות — ישירות מתוך קיצורי הדרך באייפון</h1>
+        <p><strong>בלי להוריד אפליקציה כבדה ובלי להירשם — כלי הגנה חכם שמתלבש ישירות על מערכת 'קיצורי דרך' המובנית באייפון.</strong></p>
+        <p>אין אפליקציה נוספת להתקין (0 MB של אפליקציה נוספת), אין מעקב ברקע ואין גישה לאנשי הקשר או לגלריית התמונות. הכלי פועל רק כשלוחצים על הכפתור.</p>
+        <button class="btn" onclick="openModal('waitlist_hero')">התקנת קיצור הדרך לאייפון</button>
+        <p class="free-note">3 בדיקות חינם בכל חודש, ללא כרטיס אשראי. <a href="/pro">לבדיקות ללא הגבלה — מסלול PRO</a></p>
+      </div>
+
+      <div class="phone-mockup">
+        <div class="phone-screen ios-preview">
+          <div class="ios-status"><span>9:41</span><span>●●●  Wi-Fi  ▰</span></div>
+          <div class="ios-notification">
+            <div class="ios-notification-top"><strong>הודעות</strong><span>עכשיו</span></div>
+            <strong>דואר ישראל</strong>
+            <div id="smsPreview">החבילה ממתינה. לתשלום מכס 4.90 ₪: bit.ly/post-fee</div>
+          </div>
+          <div class="ios-alert-wrap">
+            <div id="resultCard" class="ios-alert result-danger">
+              <div id="resultTitle" class="result-title">🚨 זהירות! חשד להונאה</div>
+              <div id="resultDesc">ההודעה מבקשת תשלום דרך קישור מקוצר שמתחזה לדואר. אל תזינו פרטי אשראי.</div>
+              <button id="callBtn" class="call-family-btn" onclick="alert('בדוגמה בלבד: כאן ניתן להתקשר לאיש הקשר שהוגדר בקיצור')">📞 התייעצות עם בן משפחה</button>
+            </div>
+          </div>
+          <div class="demo-switch">
+            <button type="button" onclick="setDemo('scam')">תצוגת אזהרה</button>
+            <button type="button" onclick="setDemo('safe')">תצוגה בטוחה</button>
+          </div>
+          <div class="ios-home-indicator"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="shortcuts-guide" aria-labelledby="shortcuts-guide-title">
+      <h2 id="shortcuts-guide-title">מה קורה כשלוחצים על התקנה?</h2>
+      <p class="guide-intro">אין אפליקציה חדשה או הרשמה מסובכת — רק קיצור של אפל, שמופעל כשאתם בוחרים להפעיל אותו.</p>
+      <div class="guide-grid">
+        <article class="guide-step"><span class="step-number">1</span><h3>מוסיפים קיצור</h3><p>הקישור פותח את אפליקציית <strong>„קיצורים” (Shortcuts)</strong> הרשמית של Apple. לוחצים על <strong>„הוספת קיצור”</strong>.</p></article>
+        <article class="guide-step"><span class="step-number">2</span><h3>בוחרים כפתור הפעלה</h3><p>מחברים את הקיצור לכפתור הנגישות הצף (AssistiveTouch) או למרכז הבקרה. מדריך קצר וברור ילווה אתכם — ההגדרה אורכת בערך 15 שניות.</p></article>
+        <article class="guide-step"><span class="step-number">3</span><h3>בודקים בלחיצה אחת</h3><p>קיבלתם הודעה חשודה? לוחצים על הכפתור. הקיצור מצלם את המסך, שולח לניתוח ומציג תשובה, בדרך כלל תוך כ-3 שניות. בהרצה הראשונה מאשרים את בקשת iOS לשיתוף צילום המסך לבדיקה.</p></article>
+      </div>
+      <p class="permission-note"><strong>אתם בשליטה:</strong> הקיצור אינו פועל ברקע. צילום נשלח לבדיקה רק לאחר הפעלה יזומה ואישור ההרשאות המבוקשות על ידי iOS.</p>
+    </section>
+
+    <section class="features">
+      <div class="card">
+        <h3>👆 כפתורים גדולים, אפס סיבוך</h3>
+        <p>ממשק נקי בעברית עם ניגודיות גבוהה ואותיות ענקיות, מותאם במיוחד לגיל השלישי בלי תפריטים מבלבלים.</p>
+      </div>
+      <div class="card">
+        <h3>📞 חיוג מהיר אליכם ברגע אמת</h3>
+        <p>ברגע שמתגלה הודעת הונאה, מופיע על המסך כפתור אדום גדול שמחייג ישירות אליכם בלחיצה אחת.</p>
+      </div>
+      <div class="card">
+        <h3>🛡️ הגנה חכמה 24/7</h3>
+        <p>מזהה התחזות לבנקים, דואר ישראל, ביטוח לאומי, כביש 6, קופות חולים וקישורים זדוניים בוואטסאפ.</p>
+      </div>
+    </section>
+
+    <section class="pricing-section" id="pricing">
+      <h2>בדיקות חינם, בלי כרטיס אשראי</h2>
+      <p style="color:var(--muted);">3 בדיקות בכל חודש ללא תשלום. רוצים בדיקות ללא הגבלה? <a href="/pro">הכירו את שומר הראש PRO</a>.</p>
+
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div>
+            <h3>התנסות חינם</h3>
+            <div class="price">0 ₪ <span>/ לתמיד</span></div>
+            <ul>
+              <li>✓ עד 3 בדיקות הודעה בחודש</li>
+              <li>✓ התראת רמזור ברורה בעברית</li>
+              <li>✓ ללא צורך בכרטיס אשראי</li>
+            </ul>
+          </div>
+          <button class="btn btn-outline" onclick="openModal('plan_free')">שריין הורדה חינם</button>
+        </div>
+
+        <div class="price-card featured">
+          <div class="ribbon">הכי פופולרי למשפחות</div>
+          <div>
+            <h3>שומר הראש PRO — חודשי</h3>
+            <div class="price">9.90 ₪ <span>/ לחודש</span></div>
+            <ul>
+              <li>✓ בדיקות ללא הגבלה</li>
+              <li>✓ קוד הפעלה אישי</li>
+              <li>✓ ביטול בכל עת, ללא התחייבות</li>
+            </ul>
+          </div>
+          <button class="btn" onclick="openModal('plan_monthly_19_90')">שריין מנוי השקה (50% הנחה)</button>
+        </div>
+
+        <div class="price-card">
+          <div>
+            <h3>שומר הראש PRO — שנתי</h3>
+            <div class="price">49 ₪ <span>/ לשנה</span></div>
+            <ul>
+              <li>✓ בדיקות ללא הגבלה</li>
+              <li>✓ תשלום שנתי שקוף</li>
+              <li>✓ ביטול בכל עת</li>
+            </ul>
+          </div>
+          <button class="btn btn-outline" onclick="openModal('plan_yearly_119')">שריין מנוי שנתי</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="legal-footer">
+      <h2>תנאי שימוש, הגבלת אחריות ופרטיות</h2>
+      <p>השירות מבוסס בינה מלאכותית (AI) ומשמש ככלי עזר והמלצה בלבד; הוא אינו מהווה תחליף לשיקול דעת אישי, ייעוץ אבטחת מידע או הגנת סייבר מוחלטת, והמפעיל אינו נושא באחריות לנזק ישיר או עקיף כתוצאה מהסתמכות על תוצאות הבדיקה.</p>
+      <p><strong>פרטיות:</strong> קיצור הדרך אינו אפליקציה נפרדת, אינו עוקב אחריכם ברקע ואינו מקבל גישה לאנשי הקשר או לגלריית התמונות. בעת לחיצה והפעלת הקיצור, iOS יבקש הרשאה לצילום ולשליחת המסך לבדיקה; צילום שנשלח לניתוח בזמן אמת אינו נשמר במאגרי המערכת.</p>
+      <p><strong>יוצר:</strong> סהר בן-ארוש. 3 בדיקות חינם בכל חודש, ללא כרטיס אשראי. <a href="/pro">שדרוג ל-PRO</a> לבדיקות ללא הגבלה.</p>
+      <p>שומר הראש © 2026 | מיועד להגנה על הגיל השלישי מפני הונאות רשת</p>
+    </footer>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" id="signupModal">
+    <div class="modal">
+      <button class="close-btn" onclick="closeModal()">×</button>
+      <h3 style="font-size:1.5rem; margin-bottom:8px;">קבלו את קיצור הדרך של שומר הראש</h3>
+      <p style="color:var(--muted); font-size:0.98rem;">השאירו פרטי קשר כדי לקבל מדריך התקנה ועדכונים. שומר הראש הוא קיצור לאייפון — לא אפליקציה כבדה מה-App Store.</p>
+
+      <form id="leadForm" action="https://formspree.io/f/xppdqgpj" method="POST" onsubmit="handleSubmit(event)">
+        <input type="hidden" name="selected_plan" id="selectedPlanInput" value="waitlist_hero" />
+        <input type="text" name="contact" id="contactInput" placeholder="אימייל או מספר טלפון (לוואטסאפ)" required />
+        <label for="deviceType" style="display:block; margin:12px 0 6px; font-weight:700;">באיזה מכשיר משתמשים?</label>
+        <select name="device_type" id="deviceType" required style="width:100%; padding:14px; margin-bottom:12px; border:1px solid var(--border); border-radius:10px; font:inherit;">
+          <option value="" disabled selected>בחרו מכשיר</option>
+          <option value="iphone">אייפון (iPhone)</option>
+          <option value="android">אנדרואיד (Android)</option>
+        </select>
+        <button type="submit" id="submitBtn" class="btn" style="width:100%;">קבלו מדריך וקישור לקיצור הדרך</button>
+      </form>
+      <div id="thankYouMsg" style="display:none; background:#f0fdf4; color:#166534; padding:16px; border-radius:12px; margin-top:12px; font-weight:700;">תודה! הפרטים נשלחו בהצלחה.</div>
+      <section id="iphoneOnboarding" class="onboarding-panel" style="display:none;" aria-live="polite">
+        <h4>מתחילים באייפון</h4>
+        <p>הוסיפו את קיצור הדרך והגדירו את הכפתור הצף:</p>
+        <!-- TODO: Replace this placeholder with the published iCloud Shortcut URL. -->
+        <a id="iosShortcutLink" class="btn" href="https://www.icloud.com/shortcuts/REPLACE_WITH_YOUR_LINK" target="_blank" rel="noopener">התקנת קיצור הדרך לאייפון</a>
+        <ol class="setup-steps">
+          <li>לחיצה על „הוספת קיצור”.</li>
+          <li>חיבור לכפתור הצף בהגדרות ← נגישות ← מגע ← AssistiveTouch.</li>
+          <li>אישור הרשאה בהפעלה הראשונה.</li>
+        </ol>
+      </section>
+      <div id="androidWaitlistMsg" class="onboarding-panel" style="display:none;" aria-live="polite">
+        <h4>נרשמתם לרשימת ההמתנה לאנדרואיד</h4>
+        <p>צורפתם לרשימת העדיפות לאנדרואיד ונעדכן אתכם כשהשירות יהיה זמין.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function setDemo(type) {
+      const sms = document.getElementById('smsPreview');
+      const card = document.getElementById('resultCard');
+      const title = document.getElementById('resultTitle');
+      const desc = document.getElementById('resultDesc');
+      const callBtn = document.getElementById('callBtn');
+
+      if (type === 'scam') {
+        sms.textContent = 'דואר ישראל: החבילה ממתינה. לתשלום מכס 4.90 ₪: bit.ly/post-fee';
+        card.className = 'ios-alert result-danger';
+        title.textContent = '🚨 זהירות! חשד להונאה';
+        desc.textContent = 'ההודעה מבקשת תשלום דרך קישור מקוצר שמתחזה לדואר. אל תזינו פרטי אשראי.';
+        callBtn.style.display = 'block';
+      } else {
+        sms.textContent = 'קופת חולים כללית: תזכורת לתור שנקבע למחר בשעה 10:30 במרפאה.';
+        card.className = 'ios-alert result-safe';
+        title.textContent = '✅ ההודעה נראית בטוחה';
+        desc.textContent = 'זו תזכורת רגילה מכללית. לא התבקשתם למסור פרטים אישיים או פרטי תשלום.';
+        callBtn.style.display = 'none';
+      }
+    }
+
+    function openModal(plan) {
+      document.getElementById('selectedPlanInput').value = plan;
+      document.getElementById('signupModal').classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('signupModal').classList.remove('open');
+    }
+
+    async function handleSubmit(e) {
+      e.preventDefault();
+      const form = e.target;
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.textContent = 'שולח...';
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (res.ok) {
+          const device = document.getElementById('deviceType').value;
+          form.style.display = 'none';
+          document.getElementById('thankYouMsg').style.display = 'block';
+          document.getElementById('thankYouMsg').textContent = device === 'iphone'
+            ? 'תודה! נרשמתם בהצלחה. מדריך ההתקנה לאייפון מופיע כאן:'
+            : 'תודה! נרשמתם לרשימת העדיפות לאנדרואיד. נודיע לכם עם השקת השירות.';
+          document.getElementById('iphoneOnboarding').style.display = device === 'iphone' ? 'block' : 'none';
+          document.getElementById('androidWaitlistMsg').style.display = device === 'android' ? 'block' : 'none';
+        } else {
+          throw new Error('Form error');
+        }
+      } catch (err) {
+        alert('אירעה שגיאה בשליחה, נסה שוב.');
+        btn.disabled = false;
+        btn.textContent = 'קבלו מדריך וקישור לקיצור הדרך';
+      }
+    }
+  </script>
+</body>
+</html>

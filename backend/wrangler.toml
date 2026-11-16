@@ -1,0 +1,6 @@
+name = "shomer-harosh"
+main = "index.js"
+compatibility_date = "2025-11-15"
+
+[vars]
+# Add GEMINI_API_KEY as a secret with: npx wrangler secret put GEMINI_API_KEY

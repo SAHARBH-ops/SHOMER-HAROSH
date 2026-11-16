@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="שומר הראש PRO — בדיקות ללא הגבלה להודעות חשודות.">
+  <title>שומר הראש PRO – בדיקות ללא הגבלה</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme: light; --ink:#0f172a; --muted:#475569; --blue:#1d4ed8; --line:#dbe3ee; --pale:#eff6ff; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#f8fafc; color:var(--ink); font-family:Heebo,Arial,sans-serif; line-height:1.65; }
+    .wrap { width:min(920px, calc(100% - 32px)); margin:auto; }
+    header { display:flex; justify-content:space-between; align-items:center; gap:16px; padding:20px 0; }
+    a { color:var(--blue); }
+    .brand { font-size:1.25rem; font-weight:800; text-decoration:none; }
+    .back { font-weight:600; }
+    main { padding:28px 0 42px; }
+    .hero { text-align:center; padding:36px 22px; background:white; border:1px solid var(--line); border-radius:24px; box-shadow:0 12px 35px #0f172a0b; }
+    .badge { display:inline-block; padding:4px 14px; border-radius:999px; background:#dbeafe; color:#1e40af; font-weight:700; }
+    h1 { font-size:clamp(2rem,5vw,3rem); line-height:1.2; margin:15px 0 10px; }
+    .lead { color:var(--muted); font-size:1.15rem; margin:0 auto 20px; max-width:620px; }
+    .plans { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px; margin:24px 0; text-align:right; }
+    .plan { border:1px solid var(--line); border-radius:16px; padding:18px; background:#fff; }
+    .plan strong { display:block; font-size:1.45rem; }
+    .plan span { color:var(--muted); }
+    .cancel { font-weight:600; margin:8px 0 20px; }
+    .pay { display:inline-block; min-width:min(100%,330px); padding:15px 24px; background:var(--blue); color:white; border-radius:12px; text-decoration:none; font-size:1.15rem; font-weight:800; box-shadow:0 6px 16px #1d4ed833; }
+    .pay:hover { background:#1e40af; }
+    .payments { color:var(--muted); font-weight:600; margin:12px 0 0; }
+    .steps,.trust { margin-top:22px; padding:22px; background:white; border:1px solid var(--line); border-radius:18px; }
+    h2 { font-size:1.3rem; margin:0 0 10px; }
+    ol { margin:8px 0 0; padding-right:24px; }
+    li { margin:8px 0; }
+    .trust { background:var(--pale); }
+    .trust p { margin:6px 0; }
+    footer { padding:18px 0 30px; color:var(--muted); text-align:center; font-size:.9rem; }
+    @media (max-width:560px) { header { align-items:flex-start; flex-direction:column; } .hero { padding:26px 16px; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="brand" href="/">🛡️ שומר הראש</a>
+      <a class="back" href="/">חזרה לעמוד הראשי</a>
+    </header>
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <span class="badge">מסלול PRO</span>
+        <h1 id="page-title">מסלול שומר הראש PRO – בדיקות ללא הגבלה</h1>
+        <p class="lead">בדקו הודעות וקישורים חשודים ללא מגבלת שלוש הבדיקות החודשית של המסלול החינמי.</p>
+        <div class="plans">
+          <div class="plan"><span>תשלום חודשי</span><strong>9.90 ₪ לחודש</strong><span>חיוב חודשי</span></div>
+          <div class="plan"><span>תשלום שנתי</span><strong>49 ₪ לשנה</strong><span>תשלום לשנה</span></div>
+        </div>
+        <p class="cancel">ביטול בכל עת, ללא התחייבות.</p>
+        <!-- TODO: Replace this placeholder with the live Grow / Meshulam / Green Invoice / Bit / PayBox payment URL. -->
+        <a class="pay" href="REPLACE_WITH_PAYMENT_LINK">רכישת מנוי PRO</a>
+        <p class="payments">תשלום מאובטח: Apple Pay, Bit וכרטיס אשראי · קבלה/חשבונית מיידית</p>
+      </section>
+
+      <section class="steps" aria-labelledby="activation-title">
+        <h2 id="activation-title">ההפעלה פשוטה — בשני שלבים</h2>
+        <ol>
+          <li>משלמים בלחיצה ומקבלים קוד הפעלה אישי מיד למייל או לוואטסאפ.</li>
+          <li>מזינים את הקוד פעם אחת בקיצור הדרך באייפון. לאחר האימות, הקוד מאפשר בדיקות PRO.</li>
+        </ol>
+      </section>
+
+      <section class="trust" aria-labelledby="trust-title">
+        <h2 id="trust-title">אמינות ושקיפות</h2>
+        <p><strong>יוצר:</strong> סהר בן-ארוש.</p>
+        <p><strong>פרטיות:</strong> צילומי מסך נשלחים לניתוח אוטומטי בזמן אמת ואינם נשמרים במאגרי המערכת.</p>
+        <p><strong>הבהרה:</strong> השירות מבוסס AI ומשמש כלי עזר בלבד; הוא אינו מבטיח הגנה מוחלטת ואינו תחליף לשיקול דעת אישי או ייעוץ מקצועי.</p>
+      </section>
+    </main>
+    <footer><a href="/">שומר הראש</a> · תנאי שימוש ופרטיות</footer>
+  </div>
+</body>
+</html>

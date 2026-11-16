@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.shomerharosh.app-debug-31:/xml_accessibility_service_config.xml.flat",
+        "source": "com.shomerharosh.app-main-33:/xml/accessibility_service_config.xml"
+    },
+    {
+        "merged": "com.shomerharosh.app-debug-31:/layout_bubble_button.xml.flat",
+        "source": "com.shomerharosh.app-main-33:/layout/bubble_button.xml"
+    }
+]

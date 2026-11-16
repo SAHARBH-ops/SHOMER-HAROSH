@@ -1,0 +1,17 @@
+﻿<resources>
+    <string name="app_name">שומר הראש</string>
+    <string name="license_key_hint">קוד מנוי VIP (רשותי)</string>
+    <string name="btn_overlay">אפשר תצוגה מעל אפליקציות</string>
+    <string name="btn_start">הפעל כפתור צף על המסך</string>
+    <string name="status_active">סטטוס: כפתור צף פעיל</string>
+    <string name="status_inactive">סטטוס: נדרשת הרשאת הצגה מעל אפליקציות</string>
+    <string name="status_unknown">סטטוס: לא ידוע</string>
+    <string name="toast_overlay_granted">הרשאת הצגה אושרה</string>
+    <string name="toast_overlay_needed">נא לאפשר קודם הצגה מעל אפליקציות</string>
+    <string name="toast_service_started">שומר הראש פעיל - הכפתור הצף יופיע על המסך</string>
+    <string name="dialog_close">סגור</string>
+    <string name="error_connection">שגיאה בחיבור</string>
+    <string name="error_connection_msg">לא ניתן היה לשלוח את צילום המסך לבדיקה. בדוק את חיבור האינטרנט ונסה שוב.</string>
+    <string name="error_parse">תוצאה לא ברורה</string>
+    <string name="error_parse_msg">לא ניתן לפענח את התשובה מהשרת.</string>
+</resources>

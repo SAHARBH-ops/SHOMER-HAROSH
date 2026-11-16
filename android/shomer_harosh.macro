@@ -1,0 +1,77 @@
+{
+  "macroName": "שומר הראש",
+  "description": "בודק הודעות חשודות ומאתר הונאות בחינם - עד 3 בדיקות בחודש למכשיר",
+  "created": 1731700000000,
+  "modified": 1731700000000,
+  "lastRun": null,
+  "runCount": 0,
+  "enabled": true,
+  "version": 1,
+  "triggers": [
+    {
+      "type": "FloatingButtonTrigger",
+      "enabled": true,
+      "settings": {
+        "buttonText": "שומר הראש",
+        "buttonIcon": "shield",
+        "buttonColor": "#007AFF",
+        "showOnScreen": true
+      }
+    }
+  ],
+  "constraints": [],
+  "actions": [
+    {
+      "type": "TakeScreenshotAction",
+      "enabled": true,
+      "settings": {
+        "savePath": "/sdcard/Pictures/shomer_temp.jpg",
+        "quality": 90
+      }
+    },
+    {
+      "type": "HttpRequestAction",
+      "enabled": true,
+      "settings": {
+        "method": "POST",
+        "url": "https://shomer-harosh.shomer-harosh.workers.dev",
+        "contentBodyType": "multipart/form-data",
+        "timeout": 10000,
+        "saveResponseBodyToVariable": "server_reply",
+        "formData": [
+          {
+            "name": "image",
+            "type": "file",
+            "filePath": "/sdcard/Pictures/shomer_temp.jpg"
+          },
+          {
+            "name": "device_id",
+            "type": "string",
+            "value": "{device_id}"
+          }
+        ]
+      }
+    },
+    {
+      "type": "JsonParseAction",
+      "enabled": true,
+      "settings": {
+        "jsonString": "{lv=server_reply}",
+        "dictionaryVariable": "parsed_reply"
+      }
+    },
+    {
+      "type": "DisplayDialogAction",
+      "enabled": true,
+      "settings": {
+        "title": "{lv=parsed_reply[alert_title]}",
+        "message": "{lv=parsed_reply[simple_explanation]}",
+        "positiveButtonText": "סגור",
+        "neutralButtonText": null,
+        "negativeButtonText": null,
+        "icon": "alert"
+      }
+    }
+  ],
+  "category": "שומר הראש"
+}
