@@ -1,0 +1,6 @@
+﻿**/node_modules/
+**/build/
+**/.gradle/
+**/.wrangler/
+local.properties
+*.log

@@ -3,19 +3,22 @@ package com.shomerharosh.app
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.media.projection.MediaProjectionManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.text.InputType
 import android.view.Gravity
+import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var statusText: TextView
-    private lateinit var codeInput: EditText
+    private lateinit var phoneInput: EditText
 
     private val projectionLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -30,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 startService(intent)
             }
-            Toast.makeText(this, "הכפתור הצף הופעל!", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "הכפתור הצף הופעל! אפשר לצאת לוואטסאפ או להודעות.", Toast.LENGTH_LONG).show()
         } else {
             Toast.makeText(this, "נדרש אישור צילום מסך להפעלה", Toast.LENGTH_SHORT).show()
         }
@@ -40,43 +43,63 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val prefs = getSharedPreferences("prefs_shomer", Context.MODE_PRIVATE)
 
+        val scroll = ScrollView(this)
         val layout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(48, 64, 48, 48)
+            setPadding(48, 56, 48, 48)
             gravity = Gravity.CENTER_HORIZONTAL
         }
 
         val title = TextView(this).apply {
             text = "🛡️ שומר הראש"
-            textSize = 28f
+            textSize = 30f
+            setTextColor(Color.parseColor("#1E3A8A"))
             gravity = Gravity.CENTER
+        }
+
+        val subtitle = TextView(this).apply {
+            text = "הגנה חכמה מהונאות ופישינג בלחיצת כפתור"
+            textSize = 16f
+            setTextColor(Color.DKGRAY)
+            gravity = Gravity.CENTER
+            setPadding(0, 8, 0, 24)
         }
 
         statusText = TextView(this).apply {
-            textSize = 18f
-            setPadding(0, 24, 0, 32)
+            textSize = 17f
+            setPadding(24, 20, 24, 20)
             gravity = Gravity.CENTER
         }
 
-        codeInput = EditText(this).apply {
-            hint = "הזן קוד קופון / מנוי VIP (אופציונלי)"
+        phoneInput = EditText(this).apply {
+            hint = "הזן מספר טלפון לזיהוי (למשל 0501234567)"
             textSize = 18f
-            setText(prefs.getString("license_key", ""))
+            inputType = InputType.TYPE_CLASS_PHONE
+            gravity = Gravity.CENTER
+            setText(prefs.getString("user_phone", ""))
         }
 
         val saveBtn = Button(this).apply {
-            text = "שמור קוד מנוי"
-            textSize = 18f
+            text = "שמור מספר טלפון"
+            textSize = 17f
             setOnClickListener {
-                val code = codeInput.text.toString().trim().uppercase()
-                prefs.edit().putString("license_key", code).apply()
-                updateStatus(code)
-                Toast.makeText(this@MainActivity, "הקוד נשמר", Toast.LENGTH_SHORT).show()
+                val rawPhone = phoneInput.text.toString().replace("[^0-9]".toRegex(), "")
+                if (rawPhone.length < 9) {
+                    Toast.makeText(this@MainActivity, "נא להזין מספר טלפון תקין (לפחות 9 ספרות)", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                prefs.edit().putString("user_phone", rawPhone).apply()
+                updateStatus(rawPhone)
+                Toast.makeText(this@MainActivity, "מספר הטלפון נשמר בהצלחה", Toast.LENGTH_SHORT).show()
             }
         }
 
+        val divider = View(this).apply {
+            layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 32)
+        }
+
         val overlayBtn = Button(this).apply {
-            text = "1. אפשר תצוגה מעל אפליקציות"
+            text = "1. אשר תצוגה מעל אפליקציות"
             textSize = 18f
             setOnClickListener {
                 val intent = Intent(
@@ -90,7 +113,18 @@ class MainActivity : AppCompatActivity() {
         val startBtn = Button(this).apply {
             text = "2. הפעל כפתור צף על המסך"
             textSize = 20f
+            setBackgroundColor(Color.parseColor("#1E3A8A"))
+            setTextColor(Color.WHITE)
+            setPadding(24, 28, 24, 28)
             setOnClickListener {
+                val currentPhone = phoneInput.text.toString().replace("[^0-9]".toRegex(), "")
+                if (currentPhone.length < 9) {
+                    Toast.makeText(this@MainActivity, "נא להזין ולשמור מספר טלפון לפני ההפעלה", Toast.LENGTH_LONG).show()
+                    return@setOnClickListener
+                }
+                prefs.edit().putString("user_phone", currentPhone).apply()
+                updateStatus(currentPhone)
+
                 if (!Settings.canDrawOverlays(this@MainActivity)) {
                     Toast.makeText(this@MainActivity, "יש לאשר קודם תצוגה מעל אפליקציות (שלב 1)", Toast.LENGTH_LONG).show()
                     return@setOnClickListener
@@ -100,22 +134,39 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        val stopBtn = Button(this).apply {
+            text = "כבה כפתור צף"
+            textSize = 16f
+            setOnClickListener {
+                stopService(Intent(this@MainActivity, FloatingHeadService::class.java))
+                Toast.makeText(this@MainActivity, "השירות כובה", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         layout.addView(title)
+        layout.addView(subtitle)
         layout.addView(statusText)
-        layout.addView(codeInput)
+        layout.addView(phoneInput)
         layout.addView(saveBtn)
+        layout.addView(divider)
         layout.addView(overlayBtn)
         layout.addView(startBtn)
-        setContentView(layout)
+        layout.addView(stopBtn)
+        scroll.addView(layout)
+        setContentView(scroll)
 
-        updateStatus(prefs.getString("license_key", "") ?: "")
+        updateStatus(prefs.getString("user_phone", "") ?: "")
     }
 
-    private fun updateStatus(code: String) {
-        statusText.text = if (code.isNotEmpty()) {
-            "מצב פעיל: מנוי VIP ללא הגבלה ($code)"
+    private fun updateStatus(phone: String) {
+        if (phone.length >= 9) {
+            statusText.text = "מזוהה במערכת: $phone\n(סטטוס VIP/PRO מתעדכן אוטומטית מהענן)"
+            statusText.setBackgroundColor(Color.parseColor("#DCFCE7"))
+            statusText.setTextColor(Color.parseColor("#14532D"))
         } else {
-            "מצב פעיל: חינמי (עד 3 בדיקות בחודש)"
+            statusText.text = "נא להזין מספר טלפון לזיהוי והפעלה"
+            statusText.setBackgroundColor(Color.parseColor("#EFF6FF"))
+            statusText.setTextColor(Color.parseColor("#1E3A8A"))
         }
     }
 }

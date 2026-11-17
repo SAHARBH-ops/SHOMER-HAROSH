@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="שומר הראש PRO — בדיקות ללא הגבלה להודעות חשודות.">
-  <title>שומר הראש PRO – בדיקות ללא הגבלה</title>
+  <meta name="description" content="שומר הראש PRO — שדרוג לבדיקות ללא הגבלה לפי מספר טלפון.">
+  <title>שומר הראש PRO – שדרוג המנוי</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2 ₪family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root { color-scheme: light; --ink:#0f172a; --muted:#475569; --blue:#1d4ed8; --line:#dbe3ee; --pale:#eff6ff; }
     * { box-sizing:border-box; }
@@ -20,16 +20,20 @@
     main { padding:28px 0 42px; }
     .hero { text-align:center; padding:36px 22px; background:white; border:1px solid var(--line); border-radius:24px; box-shadow:0 12px 35px #0f172a0b; }
     .badge { display:inline-block; padding:4px 14px; border-radius:999px; background:#dbeafe; color:#1e40af; font-weight:700; }
-    h1 { font-size:clamp(2rem,5vw,3rem); line-height:1.2; margin:15px 0 10px; }
-    .lead { color:var(--muted); font-size:1.15rem; margin:0 auto 20px; max-width:620px; }
-    .plans { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px; margin:24px 0; text-align:right; }
-    .plan { border:1px solid var(--line); border-radius:16px; padding:18px; background:#fff; }
-    .plan strong { display:block; font-size:1.45rem; }
-    .plan span { color:var(--muted); }
-    .cancel { font-weight:600; margin:8px 0 20px; }
-    .pay { display:inline-block; min-width:min(100%,330px); padding:15px 24px; background:var(--blue); color:white; border-radius:12px; text-decoration:none; font-size:1.15rem; font-weight:800; box-shadow:0 6px 16px #1d4ed833; }
+    h1 { font-size:clamp(1.9rem,4.5vw,2.7rem); line-height:1.2; margin:15px 0 10px; }
+    .lead { color:var(--muted); font-size:1.12rem; margin:0 auto 20px; max-width:620px; }
+    .plans { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin:24px 0; text-align:right; }
+    .plan { border:2px solid var(--line); border-radius:16px; padding:18px; background:#fff; cursor:pointer; transition:border-color 0.15s, background 0.15s; }
+    .plan.active { border-color:var(--blue); background:#f8fbff; }
+    .plan strong { display:block; font-size:1.45rem; color:var(--ink); }
+    .plan span { color:var(--muted); display:block; }
+    .upgrade-box { max-width:460px; margin:24px auto 0; text-align:right; background:#f8fafc; padding:22px; border-radius:16px; border:1px solid var(--line); }
+    .upgrade-box label { display:block; font-weight:700; margin-bottom:6px; }
+    .upgrade-box input, .upgrade-box select { width:100%; padding:13px; font-size:1.05rem; border:2px solid var(--line); border-radius:10px; margin-bottom:14px; font-family:inherit; background:#fff; }
+    .pay { display:block; width:100%; padding:15px 24px; background:var(--blue); color:white; border-radius:12px; border:none; cursor:pointer; font-size:1.15rem; font-weight:800; box-shadow:0 6px 16px #1d4ed833; font-family:inherit; }
     .pay:hover { background:#1e40af; }
-    .payments { color:var(--muted); font-weight:600; margin:12px 0 0; }
+    .pay:disabled { opacity:0.6; cursor:not-allowed; }
+    .payments { color:var(--muted); font-weight:600; margin:14px 0 0; font-size:0.95rem; }
     .steps,.trust { margin-top:22px; padding:22px; background:white; border:1px solid var(--line); border-radius:18px; }
     h2 { font-size:1.3rem; margin:0 0 10px; }
     ol { margin:8px 0 0; padding-right:24px; }
@@ -49,23 +53,51 @@
     <main>
       <section class="hero" aria-labelledby="page-title">
         <span class="badge">מסלול PRO</span>
-        <h1 id="page-title">מסלול שומר הראש PRO – בדיקות ללא הגבלה</h1>
-        <p class="lead">בדקו הודעות וקישורים חשודים ללא מגבלת שלוש הבדיקות החודשית של המסלול החינמי.</p>
+        <h1 id="page-title">שומר הראש PRO – הגנה רציפה ללא מגבלת 3 בדיקות</h1>
+        <p class="lead">בחרו מסלול והזינו את מספר הטלפון שהוגדר באייפון או באנדרואיד — המנוי נפתח אוטומטית על המכשיר שלכם ללא צורך בקודים.</p>
+        
         <div class="plans">
-          <div class="plan"><span>תשלום חודשי</span><strong>9.90 ₪ לחודש</strong><span>חיוב חודשי</span></div>
-          <div class="plan"><span>תשלום שנתי</span><strong>49 ₪ לשנה</strong><span>תשלום לשנה</span></div>
+          <div class="plan active" id="card-monthly" onclick="selectPlan('monthly')">
+            <span>מנוי חודשי (50% הנחת השקה)</span>
+            <strong>9.90 ₪ לחודש</strong>
+            <span>עד 40 בדיקות בחודש · ביטול בכל עת</span>
+          </div>
+          <div class="plan" id="card-annual" onclick="selectPlan('annual')">
+            <span>מנוי שנתי</span>
+            <strong>119.90 ₪ לשנה</strong>
+            <span>עד 30 בדיקות ביום · שקט נפשי לכל השנה</span>
+          </div>
         </div>
-        <p class="cancel">ביטול בכל עת, ללא התחייבות.</p>
-        <!-- TODO: Replace this placeholder with the live Grow / Meshulam / Green Invoice / Bit / PayBox payment URL. -->
-        <a class="pay" href="REPLACE_WITH_PAYMENT_LINK">רכישת מנוי PRO</a>
-        <p class="payments">תשלום מאובטח: Apple Pay, Bit וכרטיס אשראי · קבלה/חשבונית מיידית</p>
+
+        <div class="upgrade-box">
+          <form id="proForm" action="https://formspree.io/f/xppdqgpj" method="POST" onsubmit="handleProSubmit(event)">
+            <input type="hidden" name="request_type" value="PRO_UPGRADE" />
+            <label for="planSelect">מסלול נבחר:</label>
+            <select name="plan" id="planSelect" onchange="selectPlan(this.value)">
+              <option value="monthly">חודשי – 9.90 ₪ לחודש</option>
+              <option value="annual">שנתי – 119.90 ₪ לשנה</option>
+            </select>
+
+            <label for="phoneInput">מספר הטלפון להפעלת המנוי:</label>
+            <input type="tel" name="phone_number" id="phoneInput" placeholder="למשל: 0501234567" required />
+
+            <button type="submit" id="proSubmitBtn" class="pay">המשך להפעלת מנוי PRO</button>
+          </form>
+
+          <div id="proSuccess" style="display:none; background:#f0fdf4; color:#166534; padding:16px; border-radius:12px; font-weight:700; line-height:1.6;">
+            הבקשה נקלטה בהצלחה! נשלח אליכם קישור תשלום מאובטח בוואטסאפ/SMS, ומיד עם האישור מסלול ה-PRO ייפתח אוטומטית על מספר הטלפון שהזנתם.
+          </div>
+        </div>
+
+        <p class="payments">ביטול בכל עת, ללא התחייבות · חשבונית מס/קבלה כחוק</p>
       </section>
 
       <section class="steps" aria-labelledby="activation-title">
-        <h2 id="activation-title">ההפעלה פשוטה — בשני שלבים</h2>
+        <h2 id="activation-title">איך מתבצעת ההפעלה?</h2>
         <ol>
-          <li>משלמים בלחיצה ומקבלים קוד הפעלה אישי מיד למייל או לוואטסאפ.</li>
-          <li>מזינים את הקוד פעם אחת בקיצור הדרך באייפון. לאחר האימות, הקוד מאפשר בדיקות PRO.</li>
+          <li>מוודאים שהתקנתם את שומר הראש באייפון או באנדרואיד והזנתם בו את מספר הטלפון.</li>
+          <li>ממלאים למעלה את אותו מספר טלפון ומשלימים את התשלום.</li>
+          <li>המנוי משויך אוטומטית למספר הטלפון ולמכשיר שלכם — ללא צורך להקליד קודים.</li>
         </ol>
       </section>
 
@@ -78,5 +110,44 @@
     </main>
     <footer><a href="/">שומר הראש</a> · תנאי שימוש ופרטיות</footer>
   </div>
+
+  <script>
+    function selectPlan(plan) {
+      document.getElementById('planSelect').value = plan;
+      document.getElementById('card-monthly').classList.toggle('active', plan === 'monthly');
+      document.getElementById('card-annual').classList.toggle('active', plan === 'annual');
+    }
+
+    const urlPlan = new URLSearchParams(window.location.search).get('plan');
+    if (urlPlan === 'annual' || urlPlan === 'monthly') {
+      selectPlan(urlPlan);
+    }
+
+    async function handleProSubmit(e) {
+      e.preventDefault();
+      const form = e.target;
+      const btn = document.getElementById('proSubmitBtn');
+      btn.disabled = true;
+      btn.textContent = 'שולח פרטים...';
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          form.style.display = 'none';
+          document.getElementById('proSuccess').style.display = 'block';
+        } else {
+          throw new Error('Submit failed');
+        }
+      } catch {
+        alert('אירעה שגיאה בשליחה, נסה שוב.');
+        btn.disabled = false;
+        btn.textContent = 'המשך להפעלת מנוי PRO';
+      }
+    }
+  </script>
 </body>
 </html>

@@ -3,4 +3,11 @@ main = "index.js"
 compatibility_date = "2025-11-15"
 
 [vars]
-# Add GEMINI_API_KEY as a secret with: npx wrangler secret put GEMINI_API_KEY
+# רשימת מזהי מכשירים שיקבלו גישת VIP ללא הגבלה (מופרדים בפסיק)
+VIP_IDS = "ac4e19e09a7b13b7,65092461"
+# רשימת מספרי טלפון שיקבלו VIP אוטומטית (אופציונלי, מופרד בפסיק)
+VIP_PHONES = "0542193700"
+
+[[kv_namespaces]]
+binding = "SCAN_QUOTAS"
+id = "4a784cffb5934647969935a738be1ce4"
