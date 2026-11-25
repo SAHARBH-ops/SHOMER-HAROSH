@@ -153,6 +153,40 @@ class MainActivity : Activity() {
             gravity = Gravity.CENTER
         }
 
+        val upgradeBtn = makeButton("שדרג ל-PRO — לחץ כאן", "#7C3AED", density).apply {
+            setOnClickListener {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://shomer-harosh.vercel.app/pro.html")))
+            }
+        }
+
+        val refreshBtn = makeButton("רענן סטטוס PRO", "#0369A1", density).apply {
+            setOnClickListener {
+                val p = phoneInput.text.toString().trim()
+                if (p.length < 9) {
+                    Toast.makeText(this@MainActivity, "נא להזין מספר טלפון תקין", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                Thread {
+                    try {
+                        val url = java.net.URL("https://shomer-harosh.shomer-harosh.workers.dev/quota?phone=" + Uri.encode(p))
+                        val conn = url.openConnection() as java.net.HttpURLConnection
+                        conn.requestMethod = "GET"
+                        conn.connectTimeout = 10000
+                        conn.readTimeout = 10000
+                        val body = conn.inputStream.bufferedReader().use { it.readText() }
+                        conn.disconnect()
+                        runOnUiThread {
+                            Toast.makeText(this@MainActivity, body, Toast.LENGTH_LONG).show()
+                        }
+                    } catch (e: Exception) {
+                        runOnUiThread {
+                            Toast.makeText(this@MainActivity, "שגיאה ברענון סטטוס", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }.start()
+            }
+        }
+
         // ── Assemble ──────────────────────────────────────────────────────────
         layout.addView(title)
         layout.addView(subtitle)
@@ -166,6 +200,10 @@ class MainActivity : Activity() {
         layout.addView(toggleLabel)
         layout.addView(toggleRow)
         layout.addView(tipText)
+        layout.addView(space(22, density))
+        layout.addView(upgradeBtn)
+        layout.addView(space(10, density))
+        layout.addView(refreshBtn)
 
         root.addView(layout)
         setContentView(root)
