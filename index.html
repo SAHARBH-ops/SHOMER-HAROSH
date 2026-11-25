@@ -1,496 +1,851 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>שומר הראש – הגנה חכמה מהונאות ועוקצים באייפון ובאנדרואיד</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2 ₪family=Heebo:wght@400;600;700;900&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --text: #0f172a;
-      --muted: #475569;
-      --primary: #1d4ed8;
-      --primary-hover: #1e40af;
-      --danger: #dc2626;
-      --danger-bg: #fef2f2;
-      --safe: #16a34a;
-      --safe-bg: #f0fdf4;
-      --border: #e2e8f0;
-      --radius: 16px;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>שומר הראש – הגנה חכמה מהונאות ועוקצים באייפון ובאנדרואיד</title>
+<meta name="description" content="מזהה סימני עוקץ, קישורי פישינג והודעות מתחזות בוואטסאפ וב-SMS תוך שניות. לחיצה אחת, תשובה ברורה בעברית. 3 בדיקות חינם בחודש." />
+<meta name="theme-color" content="#070b1a" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#070b1a; --ink2:#0d1430; --ink3:#141d40;
+  --text:#0f172a; --muted:#475569; --muted-d:#a5b0cc;
+  --blue:#3b82f6; --blue-d:#1d4ed8; --cyan:#22d3ee; --violet:#8b5cf6;
+  --red:#ef4444; --green:#22c55e;
+  --bg:#f6f8fc; --surface:#fff; --border:#e2e8f0;
+  --r:22px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.container{max-width:1160px;margin:0 auto;padding:0 22px}
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+/* ---------- NAV ---------- */
+.nav{position:fixed;top:0;inset-inline:0;z-index:50;transition:.3s}
+.nav.scrolled{background:rgba(7,11,26,.78);backdrop-filter:blur(16px);border-bottom:1px solid #ffffff14}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:72px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:1.35rem;color:#fff;text-decoration:none}
+.logo-mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:1.2rem;background:linear-gradient(135deg,var(--blue),var(--violet));box-shadow:0 6px 20px #3b82f655}
+.nav-links{display:flex;align-items:center;gap:26px}
+.nav-links a.l{color:#cbd5f1;text-decoration:none;font-weight:500;font-size:.98rem;transition:.2s}
+.nav-links a.l:hover{color:#fff}
+.nav-cta{background:#fff;color:var(--ink)!important;padding:10px 20px;border-radius:999px;font-weight:800!important}
+@media(max-width:820px){.nav-links a.l{display:none}}
 
-    body {
-      font-family: 'Heebo', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-    }
+/* ---------- BUTTONS ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:none;cursor:pointer;font-family:inherit;font-weight:800;font-size:1.1rem;padding:17px 30px;border-radius:16px;text-decoration:none;color:#fff;background:linear-gradient(135deg,var(--blue) 0%,var(--blue-d) 100%);box-shadow:0 10px 30px #3b82f655,inset 0 1px 0 #ffffff40;transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-3px);box-shadow:0 16px 40px #3b82f677,inset 0 1px 0 #ffffff40}
+.btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.btn-ghost{background:#ffffff12;box-shadow:inset 0 0 0 1px #ffffff30;color:#fff}
+.btn-ghost:hover{background:#ffffff1f;box-shadow:inset 0 0 0 1px #ffffff55}
 
-    .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
+/* ---------- HERO ---------- */
+.hero{position:relative;background:var(--ink);color:#fff;padding:140px 0 110px;overflow:hidden;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:0;z-index:-2;background:
+  radial-gradient(600px 400px at 85% 15%,#3b82f633,transparent 70%),
+  radial-gradient(500px 380px at 10% 85%,#8b5cf633,transparent 70%),
+  radial-gradient(400px 300px at 50% 0%,#22d3ee1f,transparent 70%)}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;opacity:.5;background-image:linear-gradient(#ffffff0a 1px,transparent 1px),linear-gradient(90deg,#ffffff0a 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse at 50% 30%,#000 20%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at 50% 30%,#000 20%,transparent 75%)}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:999px;background:#ffffff10;border:1px solid #ffffff22;font-size:.92rem;font-weight:600;color:#dbe5ff;margin-bottom:22px}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 #22c55e99;animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 10px #22c55e00}100%{box-shadow:0 0 0 0 #22c55e00}}
+h1{font-size:clamp(2.4rem,5.4vw,4.1rem);font-weight:900;line-height:1.1;letter-spacing:-.02em;margin-bottom:22px}
+.grad{background:linear-gradient(100deg,#7cb4ff,#22d3ee 55%,#a78bfa);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:1.22rem;color:var(--muted-d);max-width:560px;margin-bottom:32px}
+.lead strong{color:#fff}
+.cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.fine{font-size:.95rem;color:var(--muted-d)}
+.fine a{color:#9cc4ff;font-weight:700}
+.trust-row{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:28px;color:#cbd5f1;font-size:.95rem}
+.trust-row span{display:flex;align-items:center;gap:8px}
+.trust-row i{font-style:normal;color:var(--green);font-weight:900}
 
-    header {
-      padding: 20px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
+/* ---------- PHONE ---------- */
+.phone-wrap{position:relative;display:flex;flex-direction:column;align-items:center}
+.phone-wrap::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,#3b82f655,transparent 65%);filter:blur(30px);top:40px;z-index:-1}
+.phone{width:310px;border-radius:46px;padding:11px;background:linear-gradient(160deg,#2b3560,#0b1020);box-shadow:0 40px 80px #000a,inset 0 0 0 1.5px #ffffff25;animation:float 6s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-12px)}}
+.screen{position:relative;height:590px;border-radius:36px;overflow:hidden;color:#fff;background:linear-gradient(180deg,#1a2548 0%,#0e1530 100%);padding:16px 14px;display:flex;flex-direction:column}
+.notch{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:92px;height:26px;border-radius:99px;background:#000;z-index:3}
+.status{display:flex;justify-content:space-between;direction:ltr;font-size:.74rem;font-weight:700;padding:2px 10px 0;opacity:.9}
+.time-big{text-align:center;margin-top:30px;font-size:3.4rem;font-weight:300;letter-spacing:-.02em;line-height:1}
+.date-s{text-align:center;color:#9fb0d8;font-size:.85rem;margin:4px 0 16px}
+.notif{background:rgba(248,250,252,.95);color:#1e293b;border-radius:18px;padding:12px 14px;font-size:.88rem;box-shadow:0 10px 26px #0006;transition:.4s}
+.notif-top{display:flex;justify-content:space-between;color:#64748b;font-size:.74rem;margin-bottom:4px}
+.notif b{display:block;margin-bottom:2px}
+.scan-zone{flex:1;display:flex;align-items:center;justify-content:center;padding-top:14px}
+.scanner{width:100%;position:relative}
+.alert{border-radius:22px;padding:18px 16px;text-align:center;background:rgba(24,26,40,.96);border:1.5px solid #ffffff30;box-shadow:0 16px 40px #000a;transition:.45s;opacity:1;transform:scale(1)}
+.alert.hide{opacity:0;transform:scale(.92)}
+.alert.danger{border-color:var(--red);box-shadow:0 16px 40px #000a,0 0 40px #ef444455}
+.alert.safe{border-color:var(--green);box-shadow:0 16px 40px #000a,0 0 40px #22c55e44}
+.alert .ic{font-size:2rem;margin-bottom:4px}
+.alert .t{font-weight:900;font-size:1.12rem;margin-bottom:6px}
+.alert .d{color:#d6def2;font-size:.9rem;line-height:1.5}
+.scanning{display:none;text-align:center}
+.scanning.on{display:block}
+.radar{width:86px;height:86px;border-radius:50%;margin:0 auto 12px;position:relative;border:2px solid #3b82f688;background:radial-gradient(circle,#3b82f633,transparent 70%)}
+.radar::after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,#22d3ee00 70%,#22d3eecc);animation:spin 1.1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.scanning p{font-weight:700;color:#bcd1ff}
+.fab{position:absolute;bottom:62px;left:16px;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-size:1.5rem;background:linear-gradient(135deg,var(--blue),var(--violet));box-shadow:0 8px 24px #3b82f6aa;z-index:2}
+.fab::before{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid #3b82f6aa;animation:ring 2s infinite}
+@keyframes ring{0%{transform:scale(.85);opacity:1}100%{transform:scale(1.35);opacity:0}}
+.home-bar{width:96px;height:5px;border-radius:99px;background:#fff;margin:auto auto 2px;opacity:.9}
+.demo-switch{display:flex;gap:10px;margin-top:22px;background:#ffffff0f;border:1px solid #ffffff1c;padding:6px;border-radius:999px}
+.demo-switch button{font-family:inherit;font-weight:700;font-size:.92rem;color:#cbd5f1;background:transparent;border:none;padding:10px 18px;border-radius:999px;cursor:pointer;transition:.25s}
+.demo-switch button.active{background:#fff;color:var(--ink)}
+@media(max-width:900px){
+  .hero{padding:120px 0 80px}
+  .hero-grid{grid-template-columns:1fr;text-align:center}
+  .lead{margin-inline:auto}.cta-row,.trust-row{justify-content:center}
+}
 
-    .logo {
-      font-size: 1.4rem;
-      font-weight: 900;
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+/* ---------- MARQUEE ---------- */
+.marquee{background:var(--ink2);border-block:1px solid #ffffff12;padding:20px 0;overflow:hidden;color:#cbd5f1;direction:ltr}
+.mq-label{text-align:center;font-size:.85rem;letter-spacing:.12em;color:#7f8db3;margin-bottom:12px;direction:rtl;font-weight:700}
+.mq-track{display:flex;gap:14px;width:max-content;animation:mq 38s linear infinite}
+.marquee:hover .mq-track{animation-play-state:paused}
+.mq-track span{white-space:nowrap;padding:9px 20px;border-radius:999px;background:#ffffff0d;border:1px solid #ffffff18;font-weight:600;direction:rtl}
+@keyframes mq{to{transform:translateX(-50%)}}
 
-    .badge {
-      background: #dbeafe;
-      color: var(--primary);
-      padding: 4px 12px;
-      border-radius: 999px;
-      font-size: 0.85rem;
-      font-weight: 700;
-    }
+/* ---------- STATS ---------- */
+.stats{margin-top:-1px;background:var(--ink2);padding:56px 0}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center}
+.stat b{display:block;font-size:clamp(2rem,4vw,3rem);font-weight:900;background:linear-gradient(100deg,#fff,#9cc4ff);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.1}
+.stat span{color:var(--muted-d);font-size:1rem}
+@media(max-width:700px){.stats-grid{grid-template-columns:repeat(2,1fr);row-gap:32px}}
 
-    .hero {
-      padding: 40px 0 60px;
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 40px;
-      align-items: center;
-    }
+/* ---------- SECTIONS ---------- */
+section.s{padding:100px 0}
+.eyebrow{display:inline-block;font-weight:800;font-size:.9rem;letter-spacing:.08em;color:var(--blue-d);background:#dbeafe;padding:6px 14px;border-radius:999px;margin-bottom:14px}
+.s-title{font-size:clamp(1.9rem,3.8vw,2.9rem);font-weight:900;line-height:1.15;letter-spacing:-.01em;margin-bottom:14px}
+.s-sub{font-size:1.15rem;color:var(--muted);max-width:640px}
+.center{text-align:center}.center .s-sub{margin-inline:auto}
 
-    @media (max-width: 768px) {
-      .hero { grid-template-columns: 1fr; text-align: center; padding: 24px 0 40px; }
-    }
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:56px;position:relative}
+.step{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:32px 28px;position:relative;transition:.3s;overflow:hidden}
+.step:hover{transform:translateY(-6px);box-shadow:0 24px 50px #1d4ed81f;border-color:#bfd4ff}
+.step .n{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-weight:900;font-size:1.4rem;color:#fff;background:linear-gradient(135deg,var(--blue),var(--violet));margin-bottom:18px;box-shadow:0 8px 20px #3b82f655}
+.step h3{font-size:1.35rem;margin-bottom:8px}
+.step p{color:var(--muted)}
+.step .big{position:absolute;left:-8px;top:-24px;font-size:9rem;font-weight:900;color:#1d4ed80d;line-height:1}
+@media(max-width:860px){.steps{grid-template-columns:1fr}}
+.note{margin-top:30px;padding:18px 22px;border-radius:16px;background:#eff6ff;border:1px solid #cfe0ff;color:#334155}
+.note strong{color:var(--text)}
 
-    h1 {
-      font-size: clamp(2rem, 4vw, 2.9rem);
-      font-weight: 900;
-      line-height: 1.2;
-      margin-bottom: 16px;
-    }
+/* bento */
+.bento-wrap{background:var(--ink);color:#fff;position:relative;overflow:hidden;isolation:isolate}
+.bento-wrap::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(600px 380px at 90% 0%,#3b82f62e,transparent 70%),radial-gradient(500px 340px at 0% 100%,#8b5cf62e,transparent 70%)}
+.bento-wrap .eyebrow{background:#ffffff14;color:#9cc4ff}
+.bento-wrap .s-sub{color:var(--muted-d)}
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:18px;margin-top:52px}
+.b{background:linear-gradient(160deg,#ffffff0f,#ffffff05);border:1px solid #ffffff1a;border-radius:var(--r);padding:30px;transition:.3s;position:relative;overflow:hidden}
+.b:hover{border-color:#6ea0ff77;transform:translateY(-4px);background:linear-gradient(160deg,#ffffff16,#ffffff08)}
+.b .ico{font-size:2rem;margin-bottom:14px;width:60px;height:60px;display:grid;place-items:center;border-radius:18px;background:#ffffff12}
+.b h3{font-size:1.35rem;margin-bottom:8px}
+.b p{color:var(--muted-d)}
+.b.w3{grid-column:span 3}.b.w2{grid-column:span 2}.b.w4{grid-column:span 4}
+.tl{display:flex;gap:10px;margin-top:20px}
+.tl i{width:34px;height:34px;border-radius:50%;opacity:.35}
+.tl i:nth-child(1){background:var(--red)}.tl i:nth-child(2){background:#f59e0b}.tl i:nth-child(3){background:var(--green)}
+.tl i.on{opacity:1;box-shadow:0 0 22px currentColor}
+.tl i:nth-child(1).on{color:var(--red)}.tl i:nth-child(3).on{color:var(--green)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.chips span{padding:6px 14px;border-radius:999px;background:#ffffff12;border:1px solid #ffffff1c;font-size:.9rem;font-weight:600;color:#dbe5ff}
+@media(max-width:900px){.bento{grid-template-columns:1fr 1fr}.b.w3,.b.w2,.b.w4{grid-column:span 2}}
+@media(max-width:560px){.bento{grid-template-columns:1fr}.b.w3,.b.w2,.b.w4{grid-column:span 1}}
 
-    .hero p {
-      font-size: 1.15rem;
-      color: var(--muted);
-      margin-bottom: 24px;
-    }
+/* privacy split */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.checklist{list-style:none;margin-top:26px;display:grid;gap:14px}
+.checklist li{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--border);padding:16px 18px;border-radius:16px}
+.checklist .ck{flex-shrink:0;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#dcfce7;color:#15803d;font-weight:900}
+.checklist .xx{background:#fee2e2;color:#b91c1c}
+.checklist b{display:block}
+.checklist span.d{color:var(--muted);font-size:.96rem}
+.shield-card{border-radius:30px;padding:46px 36px;text-align:center;color:#fff;background:linear-gradient(145deg,#1d4ed8,#6d28d9);box-shadow:0 30px 70px #4338ca55;position:relative;overflow:hidden}
+.shield-card::before{content:"";position:absolute;inset:-40%;background:conic-gradient(from 0deg,transparent,#ffffff22,transparent 30%);animation:spin 9s linear infinite}
+.shield-card>*{position:relative}
+.shield-card .big{font-size:5.5rem;line-height:1;margin-bottom:12px}
+.shield-card h3{font-size:1.7rem;margin-bottom:10px}
+.shield-card p{color:#dbe5ff}
+@media(max-width:860px){.split{grid-template-columns:1fr}}
 
-    .btn {
-      display: inline-block;
-      background: var(--primary);
-      color: #fff;
-      font-size: 1.15rem;
-      font-weight: 700;
-      padding: 16px 28px;
-      border-radius: 12px;
-      border: none;
-      cursor: pointer;
-      text-decoration: none;
-      transition: transform 0.15s, background 0.15s;
-    }
+/* pricing */
+.price-bg{background:linear-gradient(180deg,var(--bg),#e8eefc)}
+.toggle{display:inline-flex;margin-top:28px;padding:6px;border-radius:999px;background:#fff;border:1px solid var(--border);box-shadow:0 4px 14px #0f172a0f}
+.toggle button{font-family:inherit;border:none;background:none;padding:11px 24px;font-weight:800;font-size:1rem;border-radius:999px;cursor:pointer;color:var(--muted);transition:.25s}
+.toggle button.on{background:var(--blue-d);color:#fff;box-shadow:0 6px 16px #1d4ed855}
+.toggle .save{font-size:.78rem;background:#dcfce7;color:#15803d;padding:2px 8px;border-radius:99px;margin-inline-start:6px}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:44px;align-items:stretch}
+.plan{background:#fff;border:1px solid var(--border);border-radius:28px;padding:34px 28px;text-align:center;display:flex;flex-direction:column;transition:.3s;position:relative}
+.plan:hover{transform:translateY(-6px);box-shadow:0 26px 60px #1d4ed824}
+.plan.hot{border:2px solid var(--blue);box-shadow:0 26px 70px #3b82f633;transform:scale(1.03)}
+.plan.hot:hover{transform:scale(1.03) translateY(-6px)}
+.plan.dim{opacity:.35;filter:saturate(.4);transform:scale(.97);pointer-events:auto}
+.plan.hot.dim{transform:scale(.97)}
+.ribbon{position:absolute;top:-14px;right:50%;transform:translateX(50%);background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;padding:5px 18px;border-radius:99px;font-size:.88rem;font-weight:800;white-space:nowrap}
+.plan h3{font-size:1.4rem;margin-bottom:6px}
+.price{font-size:3rem;font-weight:900;line-height:1.1;margin:14px 0 4px}
+.price small{font-size:1rem;color:var(--muted);font-weight:500}
+.price .old{font-size:1.2rem;color:#94a3b8;text-decoration:line-through;margin-inline-end:8px;font-weight:500}
+.plan .sub{color:var(--muted);margin-bottom:20px;min-height:52px}
+.plan ul{list-style:none;text-align:right;margin-bottom:28px;display:grid;gap:10px;flex:1}
+.plan li{color:#334155;display:flex;gap:10px}
+.plan li::before{content:"✔";color:var(--green);font-weight:900}
+.pbtn{display:block;width:100%;padding:15px;border-radius:14px;font-weight:800;font-size:1.05rem;text-decoration:none;cursor:pointer;font-family:inherit;transition:.2s;text-align:center}
+.pbtn.fill{background:linear-gradient(135deg,var(--blue),var(--blue-d));color:#fff;border:none;box-shadow:0 10px 24px #3b82f655}
+.pbtn.fill:hover{transform:translateY(-2px)}
+.pbtn.line{background:#fff;color:var(--blue-d);border:1.5px solid var(--blue)}
+.pbtn.line:hover{background:#eff6ff}
+.pbtn.gray{background:var(--bg);color:var(--text);border:1px solid var(--border)}
+@media(max-width:900px){.plans{grid-template-columns:1fr;max-width:460px;margin-inline:auto}.plan.hot,.plan.hot:hover{transform:none}.plan.dim{display:none}}
 
-    .btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
-    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+/* faq */
+.faq{max-width:820px;margin:48px auto 0;display:grid;gap:12px}
+.q{background:#fff;border:1px solid var(--border);border-radius:18px;overflow:hidden;transition:.25s}
+.q.open{border-color:#a9c6ff;box-shadow:0 12px 30px #1d4ed814}
+.q button{width:100%;text-align:right;background:none;border:none;font-family:inherit;font-weight:800;font-size:1.1rem;color:var(--text);padding:20px 22px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.q button .pl{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:#eff6ff;color:var(--blue-d);display:grid;place-items:center;font-size:1.3rem;transition:.3s}
+.q.open .pl{transform:rotate(45deg);background:var(--blue-d);color:#fff}
+.q .a{max-height:0;overflow:hidden;transition:max-height .35s ease;color:var(--muted);padding:0 22px}
+.q.open .a{padding-bottom:20px}
 
-    .phone-mockup {
-      background: #0f172a;
-      border-radius: 36px;
-      padding: 14px;
-      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
-      max-width: 340px;
-      margin: 0 auto;
-    }
+/* final cta */
+.final{position:relative;margin:0 auto;border-radius:36px;padding:70px 30px;text-align:center;color:#fff;overflow:hidden;background:linear-gradient(135deg,#1d4ed8 0%,#6d28d9 100%);box-shadow:0 30px 80px #4338ca55}
+.final::before{content:"";position:absolute;inset:0;background:radial-gradient(500px 300px at 20% 0%,#22d3ee44,transparent 70%),radial-gradient(500px 300px at 90% 100%,#ffffff22,transparent 70%)}
+.final>*{position:relative}
+.final h2{font-size:clamp(1.9rem,4vw,3rem);font-weight:900;line-height:1.15;margin-bottom:12px}
+.final p{color:#dbe5ff;font-size:1.15rem;margin-bottom:28px}
+.btn-white{background:#fff;color:var(--blue-d);box-shadow:0 12px 30px #0004}
+.btn-white:hover{box-shadow:0 18px 40px #0006}
 
-    .ios-preview {
-      min-height: 470px;
-      background: linear-gradient(180deg,#172033 0%,#263650 100%);
-      color: #fff;
-      border: 1px solid #53627a;
-      border-radius: 26px;
-      padding: 20px 16px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      text-align: center;
-    }
+/* footer */
+.legal-footer{margin:70px 0 36px;padding:32px 28px;border:1px solid var(--border);background:#fff;border-radius:22px;color:var(--muted);font-size:.95rem}
+.legal-footer h2{color:var(--text);font-size:1.2rem;margin-bottom:10px}
+.legal-footer p+p{margin-top:10px}
+.legal-links{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0;padding:16px 0;border-block:1px solid var(--border)}
+.legal-link-btn{background:#f1f5f9;color:var(--text);border:1px solid var(--border);padding:9px 16px;border-radius:10px;font-family:inherit;font-size:.92rem;font-weight:700;cursor:pointer;transition:.2s}
+.legal-link-btn:hover{background:#e2e8f0}
+.legal-link-btn.cancel-btn{background:#fef2f2;color:#b91c1c;border-color:#fecaca}
 
-    .ios-status { display: flex; justify-content: space-between; direction: ltr; font-size: .78rem; font-weight: 700; padding: 0 4px; }
-    
-    .ios-notification {
-      text-align: right;
-      background: rgba(248,250,252,.94);
-      color: #1e293b;
-      border-radius: 15px;
-      padding: 14px;
-      margin: 22px 0 0;
-      box-shadow: 0 8px 22px #0005;
-      font-size: .9rem;
-    }
-    .ios-notification-top { display: flex; justify-content: space-between; color: #64748b; font-size: .78rem; margin-bottom: 5px; }
+/* modals */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(7,11,26,.7);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;z-index:100}
+.modal-backdrop.open{display:flex}
+.modal{background:#fff;border-radius:26px;max-width:540px;width:100%;padding:34px 28px;position:relative;text-align:right;max-height:90vh;overflow-y:auto;animation:pop .3s ease}
+@keyframes pop{from{opacity:0;transform:translateY(20px) scale(.97)}}
+.close-btn{position:absolute;top:14px;left:14px;width:38px;height:38px;border-radius:50%;background:#f1f5f9;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted)}
+.close-btn:hover{background:#e2e8f0}
+.modal input[type=tel],.modal input[type=text],.modal select,.modal textarea{width:100%;padding:15px;font-size:1.05rem;border:2px solid var(--border);border-radius:12px;margin:8px 0 14px;font-family:inherit;transition:.2s}
+.modal input:focus,.modal select:focus,.modal textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px #3b82f622}
+.checkbox-row{display:flex;align-items:flex-start;gap:10px;margin:10px 0 16px;font-size:.92rem;color:var(--muted)}
+.checkbox-row input{width:18px;height:18px;margin-top:3px;flex-shrink:0}
+.checkbox-row a{color:var(--blue-d);font-weight:700;text-decoration:underline;cursor:pointer}
+.onboarding-panel{margin-top:16px;padding:20px;border:1px solid #cfe0ff;border-radius:16px;background:#eff6ff}
+.onboarding-panel h4{margin-bottom:8px;font-size:1.15rem}
+.setup-steps{margin:14px 0 0;padding-right:22px;color:#334155}
+.setup-steps li{margin:8px 0}
+.device-pick{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.dev{cursor:pointer;display:block}
+.dev input{position:absolute;opacity:0;pointer-events:none}
+.dev-box{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:20px 10px;border:2px solid var(--border);border-radius:16px;transition:.2s;background:#fff}
+.dev-box b{display:grid;place-items:center;height:44px;color:var(--ink)}
+.qr-box{display:flex;gap:16px;align-items:center;margin-top:14px;padding:14px;background:#fff;border:1px solid #cfe0ff;border-radius:14px}
+.qr-box #qrCode{flex-shrink:0;width:132px;height:132px;display:grid;place-items:center}
+.qr-box #qrCode img,.qr-box #qrCode canvas{width:132px!important;height:132px!important}
+.qr-box p{font-size:.92rem;color:#334155;margin:0}
+.wa-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;padding:13px;border-radius:14px;font-weight:800;font-size:1rem;text-decoration:none;color:#fff;background:#16a34a;transition:.2s}
+.wa-btn:hover{background:#15803d}
+@media(max-width:480px){.qr-box{flex-direction:column;text-align:center}}
+.dev-box strong{font-size:1.1rem}
+.dev-box small{color:var(--muted);font-size:.82rem}
+.dev:hover .dev-box{border-color:#a9c6ff}
+.dev input:checked+.dev-box{border-color:var(--blue);background:#eff6ff;box-shadow:0 8px 22px #3b82f633}
+.dev input:focus-visible+.dev-box{outline:3px solid #93c5fd;outline-offset:2px}
+.dev-quick{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;align-items:center;color:var(--muted-d);font-size:.95rem}
+.dev-quick button{display:inline-flex;align-items:center;gap:7px;font-family:inherit;font-weight:700;font-size:.95rem;color:#fff;background:#ffffff12;border:1px solid #ffffff2a;padding:8px 16px;border-radius:999px;cursor:pointer;transition:.2s}
+.dev-quick button:hover{background:#ffffff22}
+@media(max-width:900px){.dev-quick{justify-content:center}}
+.legal-doc h4{color:var(--text);margin:14px 0 6px;font-size:1.05rem}
+.legal-doc p,.legal-doc li{color:var(--muted);font-size:.94rem;margin-bottom:8px}
+.legal-doc ul{padding-right:20px}
 
-    .ios-alert-wrap { padding: 18px 0; }
-    .ios-alert {
-      color: #fff;
-      border-radius: 20px;
-      padding: 20px 16px;
-      background: rgba(30,30,32,.97);
-      border: 1px solid #ffffff35;
-      box-shadow: 0 14px 36px #0008;
-      text-align: center;
-      backdrop-filter: blur(16px);
-    }
-    .ios-alert.result-danger { border-color: #ef4444; }
-    .ios-alert.result-safe { border-color: #22c55e; }
-    .ios-alert .result-title { color: #fff; font-size: 1.28rem; font-weight: 900; margin-bottom: 6px; }
-    .ios-alert #resultDesc { color: #e2e8f0; font-size: .94rem; }
-
-    .ios-home-indicator { width: 92px; height: 5px; border-radius: 99px; background: #fff; margin: 2px auto 0; }
-
-    .demo-switch {
-      display: flex;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .demo-switch button {
-      flex: 1;
-      padding: 8px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      border-radius: 8px;
-      border: 1px solid #64748b;
-      background: #263246;
-      color: #fff;
-      cursor: pointer;
-    }
-
-    .features {
-      padding: 40px 0;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
-    }
-
-    .card {
-      background: var(--surface);
-      padding: 28px;
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-    }
-
-    .card h3 { font-size: 1.3rem; margin-bottom: 10px; color: var(--text); }
-    .card p { color: var(--muted); }
-
-    .shortcuts-guide { padding: 32px 0; }
-    .shortcuts-guide h2 { font-size: clamp(1.6rem,3vw,2.1rem); margin-bottom: 8px; }
-    .guide-intro { color: var(--muted); margin-bottom: 18px; }
-    .guide-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
-    .guide-step { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
-    .step-number { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: #dbeafe; color: #1e40af; font-weight: 900; margin-bottom: 10px; }
-    .guide-step h3 { margin-bottom: 8px; }
-    .guide-step p, .permission-note { color: var(--muted); }
-    .permission-note { padding: 14px 16px; background: #eff6ff; border-radius: 12px; margin-top: 16px; }
-
-    @media (max-width: 768px) {
-      .guide-grid { grid-template-columns: 1fr; }
-      .ios-preview { max-width: 360px; width: 100%; margin-inline: auto; }
-      .hero p { font-size: 1.08rem; }
-    }
-
-    .modal-backdrop {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.65);
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      z-index: 100;
-    }
-    .modal-backdrop.open { display: flex; }
-    .modal {
-      background: #fff;
-      border-radius: 20px;
-      max-width: 460px;
-      width: 100%;
-      padding: 32px 26px;
-      position: relative;
-      text-align: right;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-    .close-btn {
-      position: absolute;
-      top: 16px;
-      left: 16px;
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--muted);
-    }
-    .modal input, .modal select {
-      width: 100%;
-      padding: 14px;
-      font-size: 1.05rem;
-      border: 2px solid var(--border);
-      border-radius: 10px;
-      margin: 12px 0 16px;
-      font-family: inherit;
-    }
-    .onboarding-panel { margin-top: 16px; padding: 18px; border: 1px solid var(--border); border-radius: 14px; background: #eff6ff; }
-    .onboarding-panel h4 { margin-bottom: 8px; font-size: 1.15rem; }
-    .setup-steps { margin: 14px 0 0; padding-right: 22px; }
-    .setup-steps li { margin: 8px 0; }
-    .legal-footer { margin-top: 36px; padding: 24px; border-top: 1px solid var(--border); background: #fff; border-radius: 14px; color: var(--muted); font-size: .95rem; }
-    .legal-footer h2 { color: var(--text); font-size: 1.2rem; margin-bottom: 10px; }
-    .legal-footer p + p { margin-top: 10px; }
-    .free-note { margin-top: 12px !important; font-size: 1rem !important; }
-    .free-note a { color: var(--primary); font-weight: 800; }
-  </style>
+/* reveal */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.rv.in{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}html{scroll-behavior:auto}}
+:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+</style>
 </head>
 <body>
 
-  <div class="container">
-    <header>
-      <div class="logo">🛡️ שומר הראש</div>
-      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-        <span class="badge">לאייפון ולאנדרואיד</span>
-        <a href="/pro" style="font-weight:700; color:var(--primary); text-decoration:none;">שדרוג ל-PRO ללא הגבלה</a>
-      </div>
-    </header>
-
-    <section class="hero">
-      <div>
-        <h1>הגנה חכמה מהונאות — בלחיצת כפתור ישירות על המסך</h1>
-        <p><strong>כלי הגנה פשוט ומהיר שמזהה עוקצים, קישורי פישינג והודעות מתחזות בוואטסאפ וב-SMS תוך שניות.</strong></p>
-        <p>באייפון: פועל ישירות מתוך אפליקציית „קיצורים” המובנית (0 MB). באנדרואיד: כפתור מגן צף וקל על המסך. אין מעקב ברקע ואין גישה לאנשי הקשר או לגלריית התמונות.</p>
-        <button class="btn" onclick="openModal('free_install')">התקנה בחינם לאייפון / אנדרואיד</button>
-        <p class="free-note">3 בדיקות חינם בכל חודש, ללא כרטיס אשראי. <a href="/pro">לבדיקות ללא הגבלה — מסלול PRO</a></p>
-      </div>
-
-      <div class="phone-mockup">
-        <div class="phone-screen ios-preview">
-          <div class="ios-status"><span>9:41</span><span>●●●  Wi-Fi  ▰</span></div>
-          <div class="ios-notification">
-            <div class="ios-notification-top"><strong>הודעות</strong><span>עכשיו</span></div>
-            <strong id="senderName">דואר ישראל</strong>
-            <div id="smsPreview">החבילה ממתינה. לתשלום מכס 4.90 ₪: bit.ly/post-fee</div>
-          </div>
-          <div class="ios-alert-wrap">
-            <div id="resultCard" class="ios-alert result-danger">
-              <div id="resultTitle" class="result-title">🚨 זהירות! חשד להונאה</div>
-              <div id="resultDesc">ההודעה מבקשת תשלום דרך קישור מקוצר שמתחזה לדואר. אל תזינו פרטי אשראי.</div>
-            </div>
-          </div>
-          <div class="demo-switch">
-            <button type="button" onclick="setDemo('scam')">תצוגת אזהרה</button>
-            <button type="button" onclick="setDemo('safe')">תצוגה בטוחה</button>
-          </div>
-          <div class="ios-home-indicator"></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="shortcuts-guide" aria-labelledby="shortcuts-guide-title">
-      <h2 id="shortcuts-guide-title">איך זה עובד? 3 שלבים פשוטים</h2>
-      <p class="guide-intro">התקנה חד-פעמית של כחצי דקה — והכפתור מוכן להגן עליכם ועל ההורים בכל רגע.</p>
-      <div class="guide-grid">
-        <article class="guide-step"><span class="step-number">1</span><h3>מתקינים ומזינים טלפון</h3><p>באייפון מוסיפים את קיצור הדרך, ובאנדרואיד מתקינים את כפתור המגן הצף. מזינים <strong>מספר טלפון פעם אחת</strong> לזיהוי.</p></article>
-        <article class="guide-step"><span class="step-number">2</span><h3>ממקמים כפתור צף</h3><p>מחברים לכפתור הנגישות הצף באייפון (AssistiveTouch) או מפעילים את הכפתור הצף באנדרואיד — כך שהוא זמין מעל וואטסאפ והודעות.</p></article>
-        <article class="guide-step"><span class="step-number">3</span><h3>בודקים בלחיצה אחת</h3><p>קיבלתם הודעה חשודה? לוחצים על הכפתור. המערכת מנתחת את המסך ומציגה התראת רמזור ברורה בעברית תוך כ-3 שניות.</p></article>
-      </div>
-      <p class="permission-note"><strong>אתם בשליטה מלאה:</strong> הכלי אינו פועל ברקע. צילום מסך נשלח לבדיקה רק לאחר לחיצה יזומה שלכם ואישור ההרשאות המבוקשות.</p>
-    </section>
-    
-    <section class="features">
-      <div class="card">
-        <h3>👆 כפתור גדול, אפס סיבוך</h3>
-        <p>ממשק נקי בעברית עם ניגודיות גבוהה ואותיות גדולות, מותאם במיוחד לגיל השלישי בלי תפריטים מבלבלים.</p>
-      </div>
-      <div class="card">
-        <h3>📱 מתאים לכל טלפון</h3>
-        <p>תמיכה מלאה גם באייפון (דרך קיצורי דרך) וגם באנדרואיד (כפתור מגן צף), עם זיהוי אוטומטי לפי מספר טלפון.</p>
-      </div>
-      <div class="card">
-        <h3>🛡️ הגנה חכמה 24/7</h3>
-        <p>מזהה התחזות לבנקים, דואר ישראל, ביטוח לאומי, כביש 6, קופות חולים וקישורים זדוניים בוואטסאפ.</p>
-      </div>
-    </section>
-
-    <section style="max-width: 1000px; margin: 40px auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 10px;">
-      <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 30px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-        <h3 style="font-size: 1.5rem; margin-bottom: 10px;">שומר הראש PRO – שנתי</h3>
-        <div style="font-size: 2rem; font-weight: bold; color: var(--text); margin: 15px 0;">119.90 ₪ <span style="font-size: 1rem; color: var(--muted); font-weight: normal;">/ לשנה</span></div>
-        <p style="color: var(--muted); margin-bottom: 20px;">שקט נפשי מלא לאורך כל השנה.</p>
-        <ul style="list-style: none; padding: 0; text-align: right; margin-bottom: 25px; color: var(--muted);">
-          <li style="margin-bottom: 10px;">✔️ עד 30 בדיקות ביום</li>
-          <li style="margin-bottom: 10px;">✔️ הפעלה אוטומטית על מספר הטלפון</li>
-          <li style="margin-bottom: 10px;">✔️ ביטול בכל עת</li>
-        </ul>
-        <a href="/pro?plan=annual" style="display:block; width: 100%; background: var(--bg); color: var(--primary); padding: 12px; border-radius: 8px; border: 1px solid var(--primary); font-weight: bold; text-decoration:none; font-size: 1rem;">שדרוג למנוי שנתי</a>
-      </div>
-
-      <div style="background: var(--surface); border: 2px solid var(--primary); border-radius: var(--radius); padding: 30px; text-align: center; box-shadow: 0 4px 16px rgba(29, 78, 216, 0.15); position: relative;">
-        <div style="position: absolute; top: -12px; right: 50%; transform: translateX(50%); background: var(--primary); color: white; padding: 2px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold;">הכי פופולרי למשפחות</div>
-        <h3 style="font-size: 1.5rem; margin-bottom: 10px; margin-top: 10px;">שומר הראש PRO – חודשי</h3>
-        <div style="font-size: 2rem; font-weight: bold; color: var(--primary); margin: 15px 0;">
-          <span style="text-decoration: line-through; font-size: 1.1rem; color: var(--muted); margin-left: 8px;">19.90 ₪</span>
-          9.90 ₪ <span style="font-size: 1rem; color: var(--muted); font-weight: normal;">/ לחודש</span>
-        </div>
-        <p style="color: var(--muted); margin-bottom: 20px;">עד 40 בדיקות בחודש, ביטול בכל עת.</p>
-        <ul style="list-style: none; padding: 0; text-align: right; margin-bottom: 25px; color: var(--muted);">
-          <li style="margin-bottom: 10px;">✔️ עד 40 בדיקות בחודש</li>
-          <li style="margin-bottom: 10px;">✔️ זיהוי אוטומטי ללא צורך בקודים</li>
-          <li style="margin-bottom: 10px;">✔️ ביטול בכל עת, ללא התחייבות</li>
-        </ul>
-        <a href="/pro?plan=monthly" style="display:block; width: 100%; background: var(--primary); color: white; padding: 12px; border-radius: 8px; border: none; font-weight: bold; text-decoration:none; font-size: 1rem;">שדרוג למנוי חודשי (50% הנחה)</a>
-      </div>
-
-      <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 30px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-        <h3 style="font-size: 1.5rem; margin-bottom: 10px;">התנסות חינם</h3>
-        <div style="font-size: 2rem; font-weight: bold; color: var(--text); margin: 15px 0;">0 ₪ <span style="font-size: 1rem; color: var(--muted); font-weight: normal;">/ לתמיד</span></div>
-        <p style="color: var(--muted); margin-bottom: 20px;">בדיקות חינם, בלי כרטיס אשראי.</p>
-        <ul style="list-style: none; padding: 0; text-align: right; margin-bottom: 25px; color: var(--muted);">
-          <li style="margin-bottom: 10px;">✔️ עד 3 בדיקות הודעה בחודש</li>
-          <li style="margin-bottom: 10px;">✔️ התראת רמזור ברורה בעברית</li>
-          <li style="margin-bottom: 10px;">✔️ ללא צורך בכרטיס אשראי</li>
-        </ul>
-        <button onclick="openModal('free_install')" style="width: 100%; background: var(--bg); color: var(--text); padding: 12px; border-radius: 8px; border: 1px solid var(--border); font-weight: bold; cursor: pointer; font-size: 1rem;">התקנה חינם עכשיו</button>
-      </div>
-    </section>
-
-    <footer class="legal-footer">
-      <h2>תנאי שימוש, הגבלת אחריות ופרטיות</h2>
-      <p>השירות מבוסס בינה מלאכותית (AI) ומשמש ככלי עזר והמלצה בלבד; הוא אינו מהווה תחליף לשיקול דעת אישי, ייעוץ אבטחת מידע או הגנת סייבר מוחלטת, והמפעיל אינו נושא באחריות לנזק ישיר או עקיף כתוצאה מהסתמכות על תוצאות הבדיקה.</p>
-      <p><strong>פרטיות:</strong> הכלי אינו עוקב אחריכם ברקע ואינו מקבל גישה לאנשי הקשר או לגלריית התמונות. בעת לחיצה על כפתור הבדיקה, המערכת מבקשת הרשאה לצילום המסך הנוכחי בלבד; צילום שנשלח לניתוח בזמן אמת אינו נשמר במאגרי המערכת.</p>
-      <p><strong>יוצר:</strong> סהר בן-ארוש. 3 בדיקות חינם בכל חודש, ללא כרטיס אשראי. <a href="/pro">שדרוג ל-PRO</a> לבדיקות ללא הגבלה.</p>
-      <p>שומר הראש © 2026 | מיועד להגנה על הגיל השלישי מפני הונאות רשת</p>
-    </footer>
-  </div>
-
-  <div class="modal-backdrop" id="signupModal">
-    <div class="modal">
-      <button class="close-btn" onclick="closeModal()">×</button>
-      <h3 style="font-size:1.5rem; margin-bottom:8px;">התקנת שומר הראש בחינם</h3>
-      <p style="color:var(--muted); font-size:0.98rem;">בחרו את סוג המכשיר והזינו מספר טלפון כדי לקבל מיד את קישור ההתקנה הישיר.</p>
-
-      <form id="leadForm" action="https://formspree.io/f/xppdqgpj" method="POST" onsubmit="handleSubmit(event)">
-        <input type="hidden" name="selected_plan" id="selectedPlanInput" value="free_install" />
-        <input type="tel" name="contact" id="contactInput" placeholder="מספר טלפון של המכשיר (למשל 0501234567)" required />
-        <label for="deviceType" style="display:block; margin:12px 0 6px; font-weight:700;">באיזה מכשיר משתמשים?</label>
-        <select name="device_type" id="deviceType" required>
-          <option value="" disabled selected>בחרו מכשיר</option>
-          <option value="iphone">אייפון (iPhone)</option>
-          <option value="android">אנדרואיד (Android)</option>
-        </select>
-        <button type="submit" id="submitBtn" class="btn" style="width:100%;">המשך להתקנה מיידית</button>
-      </form>
-
-      <div id="thankYouMsg" style="display:none; background:#f0fdf4; color:#166534; padding:14px; border-radius:12px; margin-top:12px; font-weight:700;"></div>
-
-      <section id="iphoneOnboarding" class="onboarding-panel" style="display:none;" aria-live="polite">
-        <h4>התקנה באייפון (30 שניות)</h4>
-        <p>לחצו על הכפתור כדי להוסיף את קיצור הדרך לאייפון:</p>
-        <a id="iosShortcutLink" class="btn" href="https://www.icloud.com/shortcuts/5b6c72afce964233bcb7f420b9e79ee7" target="_blank" rel="noopener" style="margin-top:10px; display:inline-block; text-align:center; width:100%;">הוספת קיצור הדרך לאייפון</a>
-        <ol class="setup-steps">
-          <li>לחצו על <strong>„הוספת קיצור”</strong>.</li>
-          <li>בהפעלה הראשונה הזינו את מספר הטלפון ואשרו <strong>„הרשאה קבועה”</strong>.</li>
-          <li>מומלץ לחבר לכפתור הצף: הגדרות ← נגישות ← מגע ← AssistiveTouch.</li>
-        </ol>
-      </section>
-
-      <section id="androidOnboarding" class="onboarding-panel" style="display:none;" aria-live="polite">
-        <h4>התקנה באנדרואיד (30 שניות)</h4>
-        <p>הורידו והתקינו את אפליקציית הכפתור הצף הקלה:</p>
-        <a class="btn" href="/downloads/shomer-harosh.apk" download style="margin-top:10px; display:inline-block; text-align:center; width:100%;">הורדת שומר הראש לאנדרואיד (APK)</a>
-        <ol class="setup-steps">
-          <li>פתחו את הקובץ שירד ואשרו <strong>„התקנה”</strong> (אם תתבקשו, אשרו התקנה מדפדפן Chrome).</li>
-          <li>פתחו את האפליקציה, הזינו את מספר הטלפון ולחצו <strong>„שמור מספר טלפון”</strong>.</li>
-          <li>אשרו <strong>„תצוגה מעל אפליקציות”</strong> ולחצו <strong>„הפעל כפתור צף”</strong>.</li>
-        </ol>
-      </section>
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="container nav-inner">
+    <a class="logo" href="#top"><span class="logo-mark">🛡️</span> שומר הראש</a>
+    <div class="nav-links">
+      <a class="l" href="#how">איך זה עובד</a>
+      <a class="l" href="#features">יכולות</a>
+      <a class="l" href="#pricing">מחירים</a>
+      <a class="l" href="#faq">שאלות</a>
+      <a class="l" href="/pro">PRO</a>
+      <a class="nav-cta" href="#" onclick="openModal('free_install');return false;">התקנה חינם</a>
     </div>
   </div>
+</nav>
 
-  <script>
-    function setDemo(type) {
-      const senderName = document.getElementById('senderName');
-      const sms = document.getElementById('smsPreview');
-      const card = document.getElementById('resultCard');
-      const title = document.getElementById('resultTitle');
-      const desc = document.getElementById('resultDesc');
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="container hero-grid">
+    <div>
+      <span class="pill rv"><span class="dot"></span> לאייפון ולאנדרואיד · בעברית מלאה</span>
+      <h1 class="rv d1">קיבלתם הודעה חשודה?<br><span class="grad">לחיצה אחת וזה ברור.</span></h1>
+      <p class="lead rv d2"><strong>שומר הראש מזהה סימני עוקץ, קישורי פישינג והודעות מתחזות</strong> בוואטסאפ וב-SMS תוך שניות, ומציג תשובה פשוטה בעברית. בלי מעקב ברקע ובלי גישה לאנשי הקשר או לגלריה.</p>
+      <div class="cta-row rv d3">
+        <button class="btn" onclick="openModal('free_install')">התקנה בחינם לאייפון / אנדרואיד ←</button>
+        <a class="btn btn-ghost" href="#how">איך זה עובד?</a>
+      </div>
+      <div class="dev-quick rv d3">
+        <span>או בחרו ישירות:</span>
+        <button type="button" onclick="openModal('free_install','iphone')">
+          <svg viewBox="0 0 384 512" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+          אייפון
+        </button>
+        <button type="button" onclick="openModal('free_install','android')">
+          <svg viewBox="0 0 576 512" width="18" height="18" fill="#3DDC84" aria-hidden="true"><path d="M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7-144.48,47.94-83a10,10,0,1,0-17.27-10h0l-48.54,84.07a301.25,301.25,0,0,0-246.56,0L116.18,64.45a10,10,0,1,0-17.27,10h0l47.94,83C64.53,202.22,8.24,285.55,0,384H576c-8.24-98.45-64.54-181.78-146.85-226.55"/></svg>
+          אנדרואיד
+        </button>
+      </div>
+      <p class="fine rv d3" style="margin-top:14px">3 בדיקות חינם בכל חודש, ללא כרטיס אשראי. <a href="/pro">ל-40 בדיקות בחודש — מסלול PRO</a></p>
+      <div class="trust-row rv d3">
+        <span><i>✓</i> אין מעקב ברקע</span>
+        <span><i>✓</i> צילום נשלח רק בלחיצה שלכם</span>
+        <span><i>✓</i> ביטול בכל עת</span>
+      </div>
+    </div>
 
-      if (type === 'scam') {
-        senderName.textContent = 'דואר ישראל';
-        sms.textContent = 'החבילה ממתינה. לתשלום מכס 4.90 ₪: bit.ly/post-fee';
-        card.className = 'ios-alert result-danger';
-        title.textContent = '🚨 זהירות! חשד להונאה';
-        desc.textContent = 'ההודעה מבקשת תשלום דרך קישור מקוצר שמתחזה לדואר. אל תזינו פרטי אשראי.';
-      } else {
-        senderName.textContent = 'כללית שירותי בריאות';
-        sms.textContent = 'קופת חולים כללית: תזכורת לתור שנקבע למחר בשעה 10:30 במרפאה.';
-        card.className = 'ios-alert result-safe';
-        title.textContent = '✅ ההודעה נראית בטוחה';
-        desc.textContent = 'זו תזכורת רגילה מכללית. לא התבקשתם למסור פרטים אישיים או פרטי תשלום.';
-      }
+    <div class="phone-wrap rv d2">
+      <div class="phone">
+        <div class="screen">
+          <div class="notch"></div>
+          <div class="status"><span>9:41</span><span>●●●  Wi-Fi  ▰</span></div>
+          <div class="time-big">9:41</div>
+          <div class="date-s">יום ראשון</div>
+          <div class="notif" id="notif">
+            <div class="notif-top"><strong>הודעות</strong><span>עכשיו</span></div>
+            <b id="senderName">דואר ישראל</b>
+            <div id="smsPreview">החבילה ממתינה. לתשלום מכס 4.90 ₪: bit.ly/post-fee</div>
+          </div>
+          <div class="scan-zone">
+            <div class="scanner">
+              <div class="scanning" id="scanning"><div class="radar"></div><p>בודק את ההודעה…</p></div>
+              <div id="resultCard" class="alert danger">
+                <div class="ic" id="resultIcon">🚨</div>
+                <div id="resultTitle" class="t">אזהרת אבטחה: זוהו מאפייני הונאה</div>
+                <div id="resultDesc" class="d">ההודעה מבקשת תשלום דרך קישור מקוצר שמתחזה לדואר. אל תזינו פרטי אשראי.</div>
+              </div>
+            </div>
+          </div>
+          <div class="fab">🛡️</div>
+          <div class="home-bar"></div>
+        </div>
+      </div>
+      <div class="demo-switch" role="group" aria-label="בחירת דוגמה">
+        <button type="button" id="btnScam" class="active" onclick="userDemo('scam')">הודעה חשודה</button>
+        <button type="button" id="btnSafe" onclick="userDemo('safe')">הודעה אמיתית</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-label="סוגי הונאות שהכלי מכיר">
+  <div class="mq-label">מזהה התחזות ל…</div>
+  <div class="mq-track" id="mqTrack">
+    <span>🏦 בנקים</span><span>📦 דואר ישראל</span><span>🏛️ ביטוח לאומי</span><span>🛣️ כביש 6</span><span>🏥 קופות חולים</span><span>💬 קישורים חשודים בוואטסאפ</span><span>💳 בקשות תשלום מזויפות</span><span>🔗 קישורים מקוצרים</span>
+    <span>🏦 בנקים</span><span>📦 דואר ישראל</span><span>🏛️ ביטוח לאומי</span><span>🛣️ כביש 6</span><span>🏥 קופות חולים</span><span>💬 קישורים חשודים בוואטסאפ</span><span>💳 בקשות תשלום מזויפות</span><span>🔗 קישורים מקוצרים</span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="container stats-grid">
+    <div class="stat rv"><b>~3 שנ׳</b><span>עד תשובה ברורה</span></div>
+    <div class="stat rv d1"><b>0 MB</b><span>באייפון, דרך אפליקציית קיצורים</span></div>
+    <div class="stat rv d2"><b>0</b><span>גישה לאנשי קשר או לגלריה</span></div>
+    <div class="stat rv d3"><b>3 חינם</b><span>בדיקות בכל חודש</span></div>
+  </div>
+</div>
+
+<!-- HOW -->
+<section class="s" id="how">
+  <div class="container">
+    <div class="center">
+      <span class="eyebrow rv">איך זה עובד</span>
+      <h2 class="s-title rv d1">3 שלבים פשוטים, חצי דקה התקנה</h2>
+      <p class="s-sub rv d2">התקנה חד-פעמית, והכפתור מוכן לעזור לכם ולהורים בכל רגע.</p>
+    </div>
+    <div class="steps">
+      <article class="step rv"><div class="big">1</div><div class="n">1</div><h3>מתקינים ומזינים טלפון</h3><p>באייפון מוסיפים את קיצור הדרך, ובאנדרואיד מתקינים את כפתור המגן הצף. מזינים <strong>מספר טלפון פעם אחת</strong> לזיהוי.</p></article>
+      <article class="step rv d1"><div class="big">2</div><div class="n">2</div><h3>ממקמים כפתור צף</h3><p>מחברים לכפתור הנגישות הצף באייפון (AssistiveTouch) או מפעילים את הכפתור הצף באנדרואיד, כך שהוא זמין מעל וואטסאפ והודעות.</p></article>
+      <article class="step rv d2"><div class="big">3</div><div class="n">3</div><h3>בודקים בלחיצה אחת</h3><p>קיבלתם הודעה חשודה? לוחצים על הכפתור. המערכת מנתחת את המסך ומציגה התראת רמזור ברורה בעברית תוך כ-3 שניות.</p></article>
+    </div>
+    <p class="note rv"><strong>אתם בשליטה מלאה:</strong> הכלי אינו פועל ברקע. צילום מסך נשלח לבדיקה רק לאחר לחיצה יזומה שלכם. <strong>שימו לב:</strong> אין לסרוק צילומים המכילים סיסמאות, קודי אימות חד-פעמיים (OTP), תעודות זהות או פרטי כרטיס אשראי.</p>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="s bento-wrap" id="features">
+  <div class="container">
+    <div class="center">
+      <span class="eyebrow rv">יכולות</span>
+      <h2 class="s-title rv d1">פשוט מספיק לסבתא. חכם מספיק לעוקצנים.</h2>
+      <p class="s-sub rv d2">כל מה שצריך כדי להבין בשנייה אם ההודעה בטוחה, בלי תפריטים מבלבלים.</p>
+    </div>
+    <div class="bento">
+      <div class="b w4 rv">
+        <div class="ico">👆</div>
+        <h3>כפתור גדול, אפס סיבוך</h3>
+        <p>ממשק נקי בעברית עם ניגודיות גבוהה ואותיות גדולות, מותאם במיוחד לגיל השלישי. תשובת רמזור אחת, ברורה, בלי מונחים טכניים.</p>
+        <div class="tl" aria-hidden="true"><i class="on"></i><i></i><i class="on"></i></div>
+      </div>
+      <div class="b w2 rv d1">
+        <div class="ico" style="gap:8px; display:flex; align-items:center; justify-content:center;">
+          <svg viewBox="0 0 384 512" width="22" height="22" fill="#fff" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+          <svg viewBox="0 0 576 512" width="24" height="24" fill="#3DDC84" aria-hidden="true"><path d="M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7-144.48,47.94-83a10,10,0,1,0-17.27-10h0l-48.54,84.07a301.25,301.25,0,0,0-246.56,0L116.18,64.45a10,10,0,1,0-17.27,10h0l47.94,83C64.53,202.22,8.24,285.55,0,384H576c-8.24-98.45-64.54-181.78-146.85-226.55"/></svg>
+        </div>
+        <h3>מתאים לכל טלפון</h3>
+        <p>אייפון דרך קיצורי דרך ואנדרואיד דרך כפתור מגן צף, עם זיהוי אוטומטי לפי מספר טלפון.</p>
+      </div>
+      <div class="b w3 rv">
+        <div class="ico">🛡️</div>
+        <h3>זיהוי סימני הונאה 24/7</h3>
+        <p>מאתר דפוסי התחזות ותבניות עוקץ נפוצות בהודעות ובקישורים.</p>
+        <div class="chips"><span>בנקים</span><span>דואר ישראל</span><span>ביטוח לאומי</span><span>כביש 6</span><span>קופות חולים</span><span>וואטסאפ</span></div>
+      </div>
+      <div class="b w3 rv d1">
+        <div class="ico">🔒</div>
+        <h3>פרטיות מעל הכול</h3>
+        <p>בלי מעקב ברקע, בלי גישה לאנשי קשר או לגלריה. הצילום מועבר מוצפן לניתוח בזמן אמת ואינו נשמר בשרתי השירות.</p>
+      </div>
+      <div class="b w2 rv">
+        <div class="ico">⚡</div>
+        <h3>תוך כ-3 שניות</h3>
+        <p>לוחצים, ומקבלים תשובה בעברית.</p>
+      </div>
+      <div class="b w4 rv d1">
+        <div class="ico">👨‍👩‍👧</div>
+        <h3>מתנה להורים ולסבא וסבתא</h3>
+        <p>מתקינים להם פעם אחת, מחברים לכפתור הנגישות, ומעכשיו יש להם מי ששומר עליהם מול הודעות מתחזות.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRIVACY -->
+<section class="s">
+  <div class="container split">
+    <div>
+      <span class="eyebrow rv">שקיפות מלאה</span>
+      <h2 class="s-title rv d1">אתם שולטים במה שנשלח. תמיד.</h2>
+      <p class="s-sub rv d2">שומר הראש עובד רק כשאתם מבקשים ממנו.</p>
+      <ul class="checklist">
+        <li class="rv"><span class="ck">✓</span><div><b>פועל רק בלחיצה יזומה</b><span class="d">הצילום נשלח לבדיקה אך ורק כשאתם לוחצים.</span></div></li>
+        <li class="rv d1"><span class="ck">✓</span><div><b>הצילום אינו נשמר</b><span class="d">מועבר מוצפן (HTTPS) לניתוח בזמן אמת ואינו נשמר בשרתי השירות.</span></div></li>
+        <li class="rv d2"><span class="ck xx">✕</span><div><b>בלי אנשי קשר, גלריה, מיקום או שיחות</b><span class="d">הכלי לא מבקש ולא אוסף אותם.</span></div></li>
+      </ul>
+    </div>
+    <div class="shield-card rv d2">
+      <div class="big">🛡️</div>
+      <h3>כלי עזר שעובד בשבילכם</h3>
+      <p>הכרעה אחרונה נשארת אצלכם. השירות הוא כלי עזר מבוסס AI שעוזר לזהות סימנים חשודים, ולא תחליף לשיקול דעת.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="s price-bg" id="pricing">
+  <div class="container">
+    <div class="center">
+      <span class="eyebrow rv">מחירים</span>
+      <h2 class="s-title rv d1">מתחילים בחינם. משדרגים כשצריך.</h2>
+      <p class="s-sub rv d2">ללא התחייבות, וביטול בכל עת בלחיצת כפתור.</p>
+      <div class="toggle rv d2" role="tablist">
+        <button type="button" id="tgMonthly" class="on" onclick="setPlan('monthly')">חודשי</button>
+        <button type="button" id="tgAnnual" onclick="setPlan('annual')">שנתי <span class="save">חיסכון</span></button>
+      </div>
+    </div>
+
+    <div class="plans">
+      <div class="plan rv" id="planFree">
+        <h3>התנסות חינם</h3>
+        <div class="price">0 ₪ <small>/ לתמיד</small></div>
+        <p class="sub">בדיקות חינם, בלי כרטיס אשראי.</p>
+        <ul><li>עד 3 בדיקות הודעה בחודש</li><li>התראת רמזור ברורה בעברית</li><li>ללא צורך בכרטיס אשראי</li></ul>
+        <button class="pbtn gray" onclick="openModal('free_install')">התקנה חינם עכשיו</button>
+      </div>
+
+      <div class="plan hot rv d1" id="planMonthly">
+        <div class="ribbon">הכי פופולרי למשפחות</div>
+        <h3>שומר הראש PRO – חודשי</h3>
+        <div class="price"><span class="old">19.90 ₪</span>9.90 ₪ <small>/ לחודש</small></div>
+        <p class="sub">מחיר השקה חודשי, ללא התחייבות.</p>
+        <ul><li>עד 40 בדיקות בחודש</li><li>זיהוי אוטומטי לפי מספר הטלפון</li><li>ביטול בכל עת בלחיצת כפתור</li></ul>
+        <a class="pbtn fill" href="/pro?plan=monthly">שדרוג למנוי חודשי (50% הנחה)</a>
+      </div>
+
+      <div class="plan rv d2" id="planAnnual">
+        <h3>שומר הראש PRO – שנתי</h3>
+        <div class="price">119.90 ₪ <small>/ לשנה</small></div>
+        <p class="sub">אותו מסלול PRO מלא בתשלום שנתי מוזל (כ-9.99 ₪ לחודש).</p>
+        <ul><li>עד 40 בדיקות בחודש (זהה למסלול החודשי)</li><li>הפעלה אוטומטית על מספר הטלפון</li><li>ביטול חידוש בכל עת</li></ul>
+        <a class="pbtn line" href="/pro?plan=annual">שדרוג למנוי שנתי</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="s" id="faq">
+  <div class="container">
+    <div class="center">
+      <span class="eyebrow rv">שאלות נפוצות</span>
+      <h2 class="s-title rv d1">יש לכם שאלה? כנראה שיש כאן תשובה.</h2>
+    </div>
+    <div class="faq">
+      <div class="q rv"><button type="button" onclick="toggleQ(this)">האם האפליקציה עוקבת אחריי ברקע? <span class="pl">+</span></button><div class="a"><p>לא. הכלי אינו פועל ברקע ואינו מקבל גישה לאנשי הקשר או לגלריית התמונות. הוא נכנס לפעולה רק כשאתם לוחצים על כפתור הבדיקה.</p></div></div>
+      <div class="q rv"><button type="button" onclick="toggleQ(this)">מה בדיוק נשלח לבדיקה? <span class="pl">+</span></button><div class="a"><p>צילום המסך הנוכחי בלבד, ורק לאחר לחיצה יזומה שלכם. הוא מועבר מוצפן לניתוח בזמן אמת ואינו נשמר בשרתי השירות. אין לסרוק צילומים עם סיסמאות, קודי אימות חד-פעמיים, תעודת זהות או פרטי אשראי.</p></div></div>
+      <div class="q rv"><button type="button" onclick="toggleQ(this)">כמה בדיקות אני מקבל? <span class="pl">+</span></button><div class="a"><p>במסלול החינם עד 3 בדיקות בחודש קלנדרי. במסלול PRO (חודשי או שנתי) עד 40 בדיקות בחודש, למכשיר אחד המשויך למספר הטלפון שנרשם.</p></div></div>
+      <div class="q rv"><button type="button" onclick="toggleQ(this)">האם זה מבטיח הגנה של 100%? <span class="pl">+</span></button><div class="a"><p>לא. השירות מבוסס בינה מלאכותית ומשמש ככלי עזר והערכה בלבד, והוא עלול לטעות. הוא אינו תחליף לשיקול דעת אישי. כשיש ספק, אל תלחצו על קישור ואל תמסרו פרטים.</p></div></div>
+      <div class="q rv"><button type="button" onclick="toggleQ(this)">איך מבטלים מנוי? <span class="pl">+</span></button><div class="a"><p>בכל עת, דרך כפתור "ביטול עסקה / ביטול מנוי" בתחתית הדף. הבקשה מטופלת תוך 2 ימי עסקים.</p></div></div>
+      <div class="q rv"><button type="button" onclick="toggleQ(this)">מה צריך כדי להתקין? <span class="pl">+</span></button><div class="a"><p>באייפון מוסיפים קיצור דרך (0 MB). באנדרואיד מתקינים אפליקציית כפתור צף קלה. בשני המקרים מזינים מספר טלפון פעם אחת, וההתקנה לוקחת כחצי דקה.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA + FOOTER -->
+<div class="container">
+  <div class="final rv">
+    <h2>הודעה אחת חשודה יכולה לעלות ביוקר.<br>בדיקה אחת עולה לכם לחיצה.</h2>
+    <p>3 בדיקות חינם בכל חודש, בלי כרטיס אשראי.</p>
+    <button class="btn btn-white" onclick="openModal('free_install')">התחילו בחינם עכשיו ←</button>
+  </div>
+
+  <footer class="legal-footer">
+    <h2>תנאי שימוש, הגבלת אחריות ופרטיות</h2>
+    <p>השירות מבוסס בינה מלאכותית (AI) ומשמש ככלי עזר והערכה בלבד; הוא אינו מהווה תחליף לשיקול דעת אישי, ייעוץ אבטחת מידע או הגנת סייבר מוחלטת, והמפעיל אינו נושא באחריות לנזק ישיר או עקיף כתוצאה מהסתמכות על תוצאות הבדיקה.</p>
+    <p><strong>פרטיות:</strong> הכלי אינו עוקב אחריכם ברקע ואינו מקבל גישה לאנשי הקשר או לגלריית התמונות. בעת לחיצה על כפתור הבדיקה, המערכת מבקשת הרשאה לצילום המסך הנוכחי בלבד; צילום שנשלח לניתוח בזמן אמת אינו נשמר במאגרי המערכת.</p>
+
+    <div class="legal-links">
+      <button type="button" class="legal-link-btn" onclick="openLegalModal('terms')">📄 תקנון ותנאי שימוש</button>
+      <button type="button" class="legal-link-btn" onclick="openLegalModal('privacy')">🔒 מדיניות פרטיות (Privacy Policy)</button>
+      <button type="button" class="legal-link-btn cancel-btn" onclick="openLegalModal('cancel')">✖️ ביטול עסקה / ביטול מנוי</button>
+    </div>
+
+    <p><strong>מפעיל השירות:</strong> סהר בן-ארוש | קריית מוצקין | לשירות לקוחות וביטולים: דרך טופס הביטול לעיל.</p>
+    <p>שומר הראש © 2026 | כל הזכויות שמורות</p>
+  </footer>
+</div>
+
+<!-- מודאל התקנה -->
+<div class="modal-backdrop" id="signupModal">
+  <div class="modal">
+    <button class="close-btn" onclick="closeModal()" aria-label="סגירה">×</button>
+    <h3 style="font-size:1.5rem; margin-bottom:8px;">התקנת שומר הראש בחינם</h3>
+    <p style="color:var(--muted); font-size:0.98rem;">בחרו את סוג המכשיר והזינו מספר טלפון כדי לקבל מיד את קישור ההתקנה הישיר.</p>
+
+    <form id="leadForm" action="https://formspree.io/f/xppdqgpj" method="POST" onsubmit="handleSubmit(event)">
+      <input type="hidden" name="selected_plan" id="selectedPlanInput" value="free_install" />
+      <input type="tel" name="contact" id="contactInput" placeholder="מספר טלפון של המכשיר (למשל 0501234567)" inputmode="tel" autocomplete="tel" pattern="^05\d([- ]?\d){8}$" title="נא להזין מספר נייד ישראלי תקין בן 10 ספרות (למשל 0501234567)" required />
+      <div style="font-weight:700; margin:8px 0 8px;">באיזה מכשיר משתמשים?</div>
+      <div class="device-pick" role="radiogroup" aria-label="בחירת מכשיר">
+        <label class="dev">
+          <input type="radio" name="device_type" value="iphone" required />
+          <span class="dev-box">
+            <b class="dev-ico">
+              <svg viewBox="0 0 384 512" width="32" height="32" fill="currentColor" aria-hidden="true">
+                <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+              </svg>
+            </b>
+            <strong>אייפון</strong>
+            <small>דרך קיצורי דרך · 0 MB</small>
+          </span>
+        </label>
+        <label class="dev">
+          <input type="radio" name="device_type" value="android" required />
+          <span class="dev-box">
+            <b class="dev-ico">
+              <svg viewBox="0 0 576 512" width="38" height="38" fill="#3DDC84" aria-hidden="true">
+                <path d="M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7-144.48,47.94-83a10,10,0,1,0-17.27-10h0l-48.54,84.07a301.25,301.25,0,0,0-246.56,0L116.18,64.45a10,10,0,1,0-17.27,10h0l47.94,83C64.53,202.22,8.24,285.55,0,384H576c-8.24-98.45-64.54-181.78-146.85-226.55"/>
+              </svg>
+            </b>
+            <strong>אנדרואיד</strong>
+            <small>כפתור מגן צף</small>
+          </span>
+        </label>
+      </div>
+
+      <label class="checkbox-row">
+        <input type="checkbox" id="termsConsent" required />
+        <span>אני מאשר/ת את <a onclick="openLegalModal('terms')">תנאי השימוש והגבלת האחריות</a> ואת <a onclick="openLegalModal('privacy')">מדיניות הפרטיות</a>, ומבין/ה שהשירות הוא כלי עזר מבוסס AI בלבד.</span>
+      </label>
+
+      <button type="submit" id="submitBtn" class="btn" style="width:100%;">המשך להתקנה מיידית</button>
+    </form>
+
+    <div id="thankYouMsg" style="display:none; background:#f0fdf4; color:#166534; padding:14px; border-radius:12px; margin-top:12px; font-weight:700;"></div>
+
+    <section id="iphoneOnboarding" class="onboarding-panel" style="display:none;" aria-live="polite">
+      <h4>התקנה באייפון (30 שניות)</h4>
+      <p>לחצו על הכפתור כדי להוסיף את קיצור הדרך לאייפון:</p>
+      <a id="iosShortcutLink" class="btn" href="https://www.icloud.com/shortcuts/5b6c72afce964233bcb7f420b9e79ee7" target="_blank" rel="noopener" style="margin-top:10px; display:flex; width:100%;">הוספת קיצור הדרך לאייפון</a>
+      <div class="qr-box" id="qrBox">
+        <div id="qrCode" aria-label="קוד QR להתקנה באייפון"></div>
+        <p><strong>גולשים מהמחשב?</strong> סרקו את הקוד במצלמה של האייפון כדי לפתוח את הקיצור ישירות בטלפון.</p>
+      </div>
+      <a id="waShare" class="wa-btn" href="#" target="_blank" rel="noopener">💬 שלח את הקישור בוואטסאפ (לעצמי או להורה)</a>
+      <ol class="setup-steps">
+        <li>לחצו על <strong>„הוספת קיצור”</strong>.</li>
+        <li>בהפעלה הראשונה הזינו את מספר הטלפון ואשרו <strong>„הרשאה קבועה”</strong>.</li>
+        <li>מומלץ לחבר לכפתור הצף: הגדרות ← נגישות ← מגע ← AssistiveTouch.</li>
+      </ol>
+    </section>
+
+    <section id="androidOnboarding" class="onboarding-panel" style="display:none;" aria-live="polite">
+      <h4>התקנה באנדרואיד (30 שניות)</h4>
+      <p>הורידו והתקינו את אפליקציית הכפתור הצף הקלה:</p>
+      <a class="btn" href="/downloads/shomer-harosh.apk" download style="margin-top:10px; display:flex; width:100%;">הורדת שומר הראש לאנדרואיד (APK)</a>
+      <ol class="setup-steps">
+        <li>פתחו את הקובץ שירד ואשרו <strong>„התקנה”</strong> (אם תתבקשו, אשרו התקנה מדפדפן Chrome).</li>
+        <li>פתחו את האפליקציה, הזינו את מספר הטלפון ולחצו <strong>„שמור מספר טלפון”</strong>.</li>
+        <li>אשרו <strong>„תצוגה מעל אפליקציות”</strong> ולחצו <strong>„הפעל כפתור צף”</strong>.</li>
+      </ol>
+    </section>
+  </div>
+</div>
+
+<!-- מודאל משפטי -->
+<div class="modal-backdrop" id="legalModal">
+  <div class="modal legal-doc">
+    <button class="close-btn" onclick="closeLegalModal()" aria-label="סגירה">×</button>
+    <div id="legalModalContent"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+<script>
+/* ---------- NAV scroll ---------- */
+const nav = document.getElementById('nav');
+const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 24);
+window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+/* ---------- Reveal on scroll ---------- */
+const io = new IntersectionObserver((es) => {
+  es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, {threshold: .12});
+document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+/* ---------- Hero demo ---------- */
+const DEMOS = {
+  scam: {
+    sender: 'דואר ישראל',
+    sms: 'החבילה ממתינה. לתשלום מכס 4.90 ₪: bit.ly/post-fee',
+    cls: 'alert danger', icon: '🚨',
+    title: 'אזהרת אבטחה: זוהו מאפייני הונאה',
+    desc: 'ההודעה מבקשת תשלום דרך קישור מקוצר שמתחזה לדואר. אל תזינו פרטי אשראי.'
+  },
+  safe: {
+    sender: 'כללית שירותי בריאות',
+    sms: 'קופת חולים כללית: תזכורת לתור שנקבע למחר בשעה 10:30 במרפאה.',
+    cls: 'alert safe', icon: '✅',
+    title: 'לא זוהו סימני הונאה מוכרים',
+    desc: 'תזכורת שגרתית ללא בקשת פרטים או תשלום. תמיד מומלץ לאמת את השולח.'
+  }
+};
+let demoTimer = null, autoTimer = null, auto = true, current = 'scam';
+const $ = id => document.getElementById(id);
+
+function setDemo(type) {
+  const d = DEMOS[type]; current = type;
+  $('senderName').textContent = d.sender;
+  $('smsPreview').textContent = d.sms;
+  $('btnScam').classList.toggle('active', type === 'scam');
+  $('btnSafe').classList.toggle('active', type === 'safe');
+  const card = $('resultCard'), scanning = $('scanning');
+  clearTimeout(demoTimer);
+  card.className = 'alert hide';
+  scanning.classList.add('on');
+  demoTimer = setTimeout(() => {
+    scanning.classList.remove('on');
+    card.className = d.cls;
+    $('resultIcon').textContent = d.icon;
+    $('resultTitle').textContent = d.title;
+    $('resultDesc').textContent = d.desc;
+  }, 1300);
+}
+function userDemo(type) { auto = false; clearInterval(autoTimer); setDemo(type); }
+autoTimer = setInterval(() => { if (auto) setDemo(current === 'scam' ? 'safe' : 'scam'); }, 7000);
+
+/* ---------- Pricing toggle ---------- */
+function setPlan(p) {
+  $('tgMonthly').classList.toggle('on', p === 'monthly');
+  $('tgAnnual').classList.toggle('on', p === 'annual');
+  $('planMonthly').classList.toggle('hot', p === 'monthly');
+  $('planAnnual').classList.toggle('hot', p === 'annual');
+  const rb = $('planMonthly').querySelector('.ribbon');
+  if (rb) rb.style.display = p === 'monthly' ? '' : 'none';
+}
+
+/* ---------- FAQ ---------- */
+function toggleQ(btn) {
+  const q = btn.parentElement, a = q.querySelector('.a');
+  const open = q.classList.toggle('open');
+  a.style.maxHeight = open ? a.scrollHeight + 'px' : 0;
+}
+
+/* ---------- Modals ---------- */
+function detectDevice() {
+  const ua = navigator.userAgent || '';
+  if (/iPhone|iPad|iPod/i.test(ua)) return 'iphone';
+  if (/Android/i.test(ua)) return 'android';
+  return '';
+}
+function openModal(plan, device) {
+  $('selectedPlanInput').value = plan;
+  const pick = device || detectDevice();
+  if (pick) {
+    const r = document.querySelector('input[name="device_type"][value="' + pick + '"]');
+    if (r) r.checked = true;
+  }
+  $('signupModal').classList.add('open');
+}
+function closeModal() { $('signupModal').classList.remove('open'); }
+
+const LEGAL_TEXTS = {
+  terms: `
+    <h3 style="font-size:1.4rem; margin-bottom:10px;">תקנון ותנאי שימוש – שומר הראש</h3>
+    <h4>1. מהות השירות והגבלת אחריות (Disclaimer)</h4>
+    <p>אפליקציית וכלי „שומר הראש” (להלן: „השירות”) מבוססים על מודלי בינה מלאכותית (AI) ונועדו לשמש ככלי עזר אינפורמטיבי להערכת סיכונים בהודעות ובצילומי מסך בלבד.</p>
+    <p>השירות אינו מהווה תחליף לשיקול דעתו של המשתמש, אינו מספק הגנת אנטי-וירוס או סייבר מוחלטת, ואינו חסין מטעויות — לרבות אי-זיהוי של הודעה זדונית (False Negative) או התראת שווא לגבי הודעה לגיטימית (False Positive).</p>
+    <p>האחריות הבלעדית לכל פעולה, לחיצה על קישור, ביצוע תשלום או מסירת פרטים אישיים חלה על המשתמש בלבד. מפעיל השירות לא יישא בכל אחריות לנזק ישיר, עקיף או כספי שייגרם מהסתמכות על תוצאות הבדיקה. בכל מקרה, אחריות המפעיל מוגבלת לסכום ששילם המשתמש עבור השירות בחודש הקלנדרי האחרון.</p>
+    <h4>2. מסלולי שימוש ומנויים</h4>
+    <ul>
+      <li><strong>מסלול חינם:</strong> מקנה עד 3 בדיקות בחודש קלנדרי למכשיר, ללא התחייבות.</li>
+      <li><strong>מסלול PRO (חודשי או שנתי):</strong> מקנה עד 40 בדיקות בחודש קלנדרי למכשיר אחד בלבד המשויך למספר הטלפון שנרשם.</li>
+      <li>המפעיל רשאי להגביל או לחסום שימוש אוטומטי, מסחרי או ניסיון לעקוף את מגבלות המכסה.</li>
+    </ul>
+  `,
+  privacy: `
+    <h3 style="font-size:1.4rem; margin-bottom:10px;">מדיניות פרטיות (Privacy Policy) – שומר הראש</h3>
+    <p>מדיניות פרטיות זו חלה על אתר האינטרנט ואפליקציית „שומר הראש” (Shomer Harosh) המופעלת על ידי סהר בן-ארוש.</p>
+    <h4>1. איזה מידע נאסף וכיצד נעשה בו שימוש?</h4>
+    <ul>
+      <li><strong>צילומי מסך לבדיקה:</strong> נשלחים אך ורק ביוזמת המשתמש בעת לחיצה על כפתור הסריקה. התמונה מועברת בצורה מוצפנת (HTTPS) לניתוח בזמן אמת באמצעות Google Gemini API ואינה נשמרת בשרתי השירות לאחר סיום הבדיקה.</li>
+      <li><strong>מספר טלפון ומזהה מכשיר:</strong> נשמרים במסד נתונים מאובטח (Cloudflare KV) אך ורק לצורך ניהול מכסת הבדיקות החודשית, זיהוי מנויי PRO ומניעת שימוש כפול.</li>
+      <li><strong>גישות שאנו לא מבקשים:</strong> האפליקציה אינה אוספת אנשי קשר, היסטוריית שיחות, מיקום GPS או קבצים מגלריית התמונות.</li>
+    </ul>
+    <h4>2. הנחיית אבטחה למשתמש</h4>
+    <p>אין לשלוח לסריקה צילומי מסך הכוללים סיסמאות, קודי אימות חד-פעמיים (OTP), צילומי תעודת זהות או פרטי כרטיס אשראי מלאים.</p>
+    <h4>3. מחיקת מידע ויצירת קשר</h4>
+    <p>כל משתמש ראי לבקש עיון או מחיקה מלאה של מספר הטלפון ומזהה המכשיר שלו ממאגרי המערכת באמצעות פנייה בטופס יצירת הקשר / ביטול עסקה באתר.</p>
+  `,
+  cancel: `
+    <h3 style="font-size:1.4rem; margin-bottom:8px;">ביטול עסקה / ביטול מנוי PRO</h3>
+    <p>בהתאם לחוק הגנת הצרכן, ניתן לבטל מנוי מתחדש או עסקת מכר מרחוק בכל עת באמצעות מילוי הפרטים הבאים. הביטול יטופל תוך 2 ימי עסקים.</p>
+    <form action="https://formspree.io/f/xppdqgpj" method="POST" onsubmit="handleCancelSubmit(event)">
+      <input type="hidden" name="request_type" value="CANCEL_SUBSCRIPTION" />
+      <input type="text" name="full_name" placeholder="שם מלא" required />
+      <input type="tel" name="phone_to_cancel" placeholder="מספר הטלפון המשויך למנוי" required />
+      <textarea name="reason" rows="3" placeholder="הערות (אופציונלי)"></textarea>
+      <button type="submit" id="cancelSubmitBtn" class="btn" style="width:100%; background:#dc2626; box-shadow:0 10px 24px #dc262655;">שליחת בקשת ביטול</button>
+    </form>
+    <div id="cancelConfirmMsg" style="display:none; background:#f0fdf4; color:#166534; padding:14px; border-radius:12px; margin-top:12px; font-weight:700;"></div>
+  `
+};
+
+function openLegalModal(type) {
+  $('legalModalContent').innerHTML = LEGAL_TEXTS[type] || '';
+  $('legalModal').classList.add('open');
+  if (type === 'privacy') history.replaceState(null, '', '#privacy');
+}
+function closeLegalModal() {
+  $('legalModal').classList.remove('open');
+  if (window.location.hash === '#privacy') history.replaceState(null, '', window.location.pathname);
+}
+if (window.location.hash === '#privacy') {
+  window.addEventListener('DOMContentLoaded', () => openLegalModal('privacy'));
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeLegalModal(); } });
+document.querySelectorAll('.modal-backdrop').forEach(b => b.addEventListener('mousedown', e => {
+  if (e.target === b) b.classList.remove('open');
+}));
+
+function setupIphoneShare() {
+  const link = $('iosShortcutLink').href;
+  const text = 'התקנת שומר הראש באייפון (פותחים מהאייפון): ' + link;
+  $('waShare').href = 'https://wa.me/?text=' + encodeURIComponent(text);
+  const box = $('qrCode');
+  if (box.childElementCount === 0) {
+    if (typeof QRCode === 'function') {
+      new QRCode(box, { text: link, width: 264, height: 264, correctLevel: QRCode.CorrectLevel.M });
+    } else {
+      $('qrBox').style.display = 'none';
     }
+  }
+}
 
-    function openModal(plan) {
-      document.getElementById('selectedPlanInput').value = plan;
-      document.getElementById('signupModal').classList.add('open');
-    }
+async function handleSubmit(e) {
+  e.preventDefault();
+  const form = e.target;
+  const btn = $('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'מכין התקנה...';
+  try {
+    const res = await fetch(form.action, { method:'POST', body:new FormData(form), headers:{'Accept':'application/json'} });
+    if (res.ok) {
+      const device = (form.querySelector('input[name="device_type"]:checked') || {}).value;
+      form.style.display = 'none';
+      $('thankYouMsg').style.display = 'block';
+      $('thankYouMsg').textContent = 'מעולה! קישור ההתקנה ומדריך ההפעלה מוכנים עבורכם כאן:';
+      if (device === 'iphone') setupIphoneShare();
+      $('iphoneOnboarding').style.display = device === 'iphone' ? 'block' : 'none';
+      $('androidOnboarding').style.display = device === 'android' ? 'block' : 'none';
+    } else { throw new Error('Form error'); }
+  } catch (err) {
+    alert('אירעה שגיאה, נסה שוב.');
+    btn.disabled = false;
+    btn.textContent = 'המשך להתקנה מיידית';
+  }
+}
 
-    function closeModal() {
-      document.getElementById('signupModal').classList.remove('open');
-    }
-
-    async function handleSubmit(e) {
-      e.preventDefault();
-      const form = e.target;
-      const btn = document.getElementById('submitBtn');
-      btn.disabled = true;
-      btn.textContent = 'מכין התקנה...';
-
-      try {
-        const res = await fetch(form.action, {
-          method: 'POST',
-          body: new FormData(form),
-          headers: { 'Accept': 'application/json' }
-        });
-
-        if (res.ok) {
-          const device = document.getElementById('deviceType').value;
-          form.style.display = 'none';
-          document.getElementById('thankYouMsg').style.display = 'block';
-          document.getElementById('thankYouMsg').textContent = 'מעולה! קישור ההתקנה ומדריך ההפעלה מוכנים עבורכם כאן:';
-          document.getElementById('iphoneOnboarding').style.display = device === 'iphone' ? 'block' : 'none';
-          document.getElementById('androidOnboarding').style.display = device === 'android' ? 'block' : 'none';
-        } else {
-          throw new Error('Form error');
-        }
-      } catch (err) {
-        alert('אירעה שגיאה, נסה שוב.');
-        btn.disabled = false;
-        btn.textContent = 'המשך להתקנה מיידית';
-      }
-    }
-  </script>
+async function handleCancelSubmit(e) {
+  e.preventDefault();
+  const form = e.target;
+  const btn = $('cancelSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = 'שולח בקשה...';
+  try {
+    const res = await fetch(form.action, { method:'POST', body:new FormData(form), headers:{'Accept':'application/json'} });
+    if (res.ok) {
+      form.style.display = 'none';
+      const msg = $('cancelConfirmMsg');
+      msg.style.display = 'block';
+      msg.textContent = 'בקשת הביטול התקבלה ותטופל בהקדם. אישור יישלח אליך.';
+    } else { throw new Error('Cancel form error'); }
+  } catch {
+    alert('אירעה שגיאה בשליחה, נסה שוב.');
+    btn.disabled = false;
+    btn.textContent = 'שליחת בקשת ביטול';
+  }
+}
+</script>
 </body>
 </html>
