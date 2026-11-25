@@ -68,6 +68,8 @@ class FloatingHeadService : Service() {
             "com.discord"
         )
 
+        const val ACTION_DISABLE_OVERLAY = "com.shomerharosh.app.ACTION_DISABLE_OVERLAY"
+
         /** Packages that must never replace the current foreground package (IMEs, system UI, dialogs). */
         val TRANSIENT_PACKAGES: Set<String> = setOf(
             "com.google.android.inputmethod.latin",
@@ -80,6 +82,7 @@ class FloatingHeadService : Service() {
             "com.android.systemui",
             "com.android.settings"
         )
+
         const val PREF_FLOATING_BTN_ENABLED = "floating_btn_enabled"
 
         /** Called by ScreenCaptureAccessibilityService on each window change. */
