@@ -190,9 +190,10 @@ function isPaymentSuccessful(payload) {
     const statusStr = String(rawStatus).trim().toLowerCase();
     const accepted = ['success', 'succeeded', 'paid', 'approved', 'complete', 'completed', 'ok', 'valid', 'true', '1', 'yes', 'active', 'confirmed', '000', '00', 'הצלחה', 'שולם', 'אושר', 'תקין'];
     const rejected = ['failed', 'fail', 'failure', 'cancel', 'cancelled', 'canceled', 'declined', 'rejected', 'error', 'unpaid', 'pending', 'void', 'refunded', 'chargeback', 'false', '0', 'no', 'בוטל', 'נכשל'];
-    if (rejected.includes(statusStr) || !accepted.includes(statusStr)) {
+    if (rejected.includes(statusStr)) {
       return false;
     }
+    // Unknown status strings are allowed through; only explicit rejection values block payment
   }
 
   return true;
@@ -232,10 +233,11 @@ export default {
       let amount = 0;
       if (rawAmount !== undefined) {
         amount = parseFloat(String(rawAmount).replace(/[^0-9.-]/g, ''));
-        if (!Number.isFinite(amount) || amount <= 0) {
-          return jsonResponse({ success: false, error: 'Invalid or unpaid transaction amount' }, 400);
+        if (!Number.isFinite(amount) || amount < 0) {
+          return jsonResponse({ success: false, error: 'Invalid transaction amount' }, 400);
         }
       }
+      // If amount is 0 (not provided or explicitly 0), default to monthly tier
 
       const billingCycle = amount >= 100 ? 'yearly' : 'monthly';
       const ttlDays = billingCycle === 'yearly' ? 365 : 35;

@@ -305,7 +305,7 @@ async function handleProSubmit(e) {
   const rawPhone = phoneInput.value;
   const normalizedPhone = normalizePhone(rawPhone);
 
-  if (!/^0\d{8,9}$/.test(normalizedPhone)) {
+  if (!/^05\d{8}$/.test(normalizedPhone)) {
     phoneInput.setCustomValidity('נא להזין מספר טלפון ישראלי תקין (למשל 0501234567)');
     phoneInput.reportValidity();
     return;
