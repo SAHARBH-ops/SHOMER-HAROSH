@@ -186,14 +186,15 @@ function isPaymentSuccessful(payload) {
   }
 
   const rawStatus = pickField(payload, ['status', 'payment_status', 'paymentStatus', 'transaction_status', 'transactionStatus', 'state', 'result']);
-  if (rawStatus !== undefined) {
+  if (rawStatus === undefined) {
+    // No status field present; rely on other checks above.
+  } else {
     const statusStr = String(rawStatus).trim().toLowerCase();
     const accepted = ['success', 'succeeded', 'paid', 'approved', 'complete', 'completed', 'ok', 'valid', 'true', '1', 'yes', 'active', 'confirmed', '000', '00', 'הצלחה', 'שולם', 'אושר', 'תקין'];
-    const rejected = ['failed', 'fail', 'failure', 'cancel', 'cancelled', 'canceled', 'declined', 'rejected', 'error', 'unpaid', 'pending', 'void', 'refunded', 'chargeback', 'false', '0', 'no', 'בוטל', 'נכשל'];
-    if (rejected.includes(statusStr)) {
+    if (statusStr === '' || !accepted.includes(statusStr)) {
+      console.log('IS_PAYMENT_SUCCESSFUL_UNEXPECTED_STATUS', JSON.stringify(rawStatus));
       return false;
     }
-    // Unknown status strings are allowed through; only explicit rejection values block payment
   }
 
   return true;

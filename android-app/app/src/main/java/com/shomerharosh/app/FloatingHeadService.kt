@@ -68,7 +68,18 @@ class FloatingHeadService : Service() {
             "com.discord"
         )
 
-        const val ACTION_DISABLE_OVERLAY = "com.shomerharosh.app.ACTION_DISABLE_OVERLAY"
+        /** Packages that must never replace the current foreground package (IMEs, system UI, dialogs). */
+        val TRANSIENT_PACKAGES: Set<String> = setOf(
+            "com.google.android.inputmethod.latin",
+            "com.android.inputmethod.latin",
+            "com.samsung.android.honeyboard",
+            "com.sec.android.inputmethod",
+            "com.touchtype.swiftkey",
+            "com.swiftkey.swiftkeyconfigurator",
+            "com.google.android.gms",
+            "com.android.systemui",
+            "com.android.settings"
+        )
         const val PREF_FLOATING_BTN_ENABLED = "floating_btn_enabled"
 
         /** Called by ScreenCaptureAccessibilityService on each window change. */
@@ -131,6 +142,16 @@ class FloatingHeadService : Service() {
      * foreground window/package changes.  We always dispatch to main thread.
      */
     fun onForegroundPackageChanged(pkg: String) {
+        // Ignore empty/IME/transient window changes so the button doesn't flicker or hide
+        // while the user stays inside a messaging app with a soft keyboard open.
+        if (pkg.isBlank()) {
+            // Service gone: treat as non-messaging and hide.
+            currentForegroundPackage = ""
+            handler.post { evaluateAndUpdateButtonVisibility() }
+            return
+        }
+        if (pkg == currentForegroundPackage) return
+        if (TRANSIENT_PACKAGES.contains(pkg)) return
         currentForegroundPackage = pkg
         handler.post { evaluateAndUpdateButtonVisibility() }
     }
