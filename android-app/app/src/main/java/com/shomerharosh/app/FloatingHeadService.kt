@@ -72,6 +72,7 @@ class FloatingHeadService : Service() {
         )
 
         const val ACTION_DISABLE_OVERLAY = "com.shomerharosh.app.ACTION_DISABLE_OVERLAY"
+        const val EXTRA_FLOATING_BTN_MODE = "extra_floating_btn_mode"
 
         /** Packages that must never replace the current foreground package (IMEs, system UI, dialogs). */
         val TRANSIENT_PACKAGES: Set<String> = setOf(
@@ -126,6 +127,13 @@ class FloatingHeadService : Service() {
         ensureNetworkExecutor()
         isFloatingButtonEnabled = readEnabledPref()
         floatingBtnMode = readModePref()
+        intent?.let {
+            val modeExtra = it.getStringExtra(EXTRA_FLOATING_BTN_MODE)
+            if (modeExtra?.isNotBlank() == true) {
+                floatingBtnMode = modeExtra
+                isFloatingButtonEnabled = modeExtra != "off"
+            }
+        }
         startForegroundNotification()
         registerScreenReceiver()          // idempotent
         evaluateAndUpdateButtonVisibility()
@@ -151,18 +159,12 @@ class FloatingHeadService : Service() {
      * foreground window/package changes.  We always dispatch to main thread.
      */
     fun onForegroundPackageChanged(pkg: String) {
-        // Ignore empty/IME/transient window changes so the button doesn't flicker or hide
-        // while the user stays inside a messaging app with a soft keyboard open.
-        if (pkg.isBlank()) {
-            // Service gone: treat as non-messaging and hide (unless ALWAYS ON).
-            if (floatingBtnMode != "always") {
-                currentForegroundPackage = ""
-                handler.post { evaluateAndUpdateButtonVisibility() }
-            }
-            return
-        }
-        if (pkg == currentForegroundPackage) return
+        // Ignore blank/empty packages — they don't represent a real app switch
+        // and must not clear the known messaging-app state.
+        if (pkg.isBlank()) return
+        // Ignore IMEs, system UI, dialogs — they don't change the foreground app context.
         if (TRANSIENT_PACKAGES.contains(pkg)) return
+        if (pkg == currentForegroundPackage) return
         currentForegroundPackage = pkg
         handler.post { evaluateAndUpdateButtonVisibility() }
     }
@@ -176,6 +178,14 @@ class FloatingHeadService : Service() {
         isFloatingButtonEnabled = mode != "off"
         handler.post { evaluateAndUpdateButtonVisibility() }
     }
+
+    /**
+     * Returns true if [pkg] belongs to a known messaging app, including sub-processes
+     * and auxiliary windows whose package name starts with a known messaging package
+     * (e.g. com.whatsapp:push still matches com.whatsapp).
+     */
+    private fun isMessagingPackage(pkg: String): Boolean =
+        MESSAGING_PACKAGES.any { pkg.startsWith(it) }
 
     /**
      * Show/hide the floating button based on:
@@ -192,7 +202,7 @@ class FloatingHeadService : Service() {
         val shouldShow = when (floatingBtnMode) {
             "off" -> false
             "always" -> isFloatingButtonEnabled && permOk
-            else -> isFloatingButtonEnabled && permOk && MESSAGING_PACKAGES.contains(currentForegroundPackage)
+            else -> isFloatingButtonEnabled && permOk && isMessagingPackage(currentForegroundPackage)
         }
 
         if (shouldShow) {

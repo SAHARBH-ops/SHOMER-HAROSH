@@ -184,6 +184,15 @@ class MainActivity : Activity() {
             }
         }
 
+        // ── Status label ──────────────────────────────────────────────────────
+        val statusLabel = TextView(this).apply {
+            text = ""
+            textSize = 15f
+            setTextColor(Color.parseColor("#475569"))
+            setPadding(0, (10 * density).toInt(), 0, 0)
+            gravity = Gravity.CENTER
+        }
+
         val refreshBtn = makeButton("רענן סטטוס PRO", "#0369A1", density).apply {
             setOnClickListener {
                 val p = phoneInput.text.toString().trim()
@@ -203,23 +212,27 @@ class MainActivity : Activity() {
                         runOnUiThread {
                             val msg = try {
                                 val json = org.json.JSONObject(body)
-                                val plan = json.optString("plan", "FREE")
-                                val used = json.optInt("used", 0)
-                                val limit = json.optInt("limit", 0)
-                                val remaining = json.optInt("remaining", 0)
-                                if (plan.equals("PRO", ignoreCase = true)) {
-                                    "מסלול PRO פעיל — נותרו $remaining מתוך $limit סריקות החודש."
+                                val plan = json.optString("plan", json.optString("is_pro", "").ifEmpty { "FREE" })
+                                val remaining = json.optInt("remaining", json.optInt("remaining_scans", -1))
+                                val limit = json.optInt("limit", json.optInt("scan_limit", 0))
+                                val rem = if (remaining >= 0) remaining else maxOf(0, limit - json.optInt("used", 0))
+                                if (plan.equals("PRO", ignoreCase = true) || json.optBoolean("is_pro", false)) {
+                                    "מסלול PRO פעיל — נותרו $rem מתוך $limit סריקות החודש."
                                 } else {
-                                    "מסלול חינמי — נותרו $remaining מתוך $limit סריקות החודש."
+                                    "מסלול חינמי — נותרו $rem מתוך $limit סריקות החודש."
                                 }
                             } catch (e: Exception) {
                                 "לא ניתן לקרוא את סטטוס המנוי מהשרת."
                             }
                             Toast.makeText(this@MainActivity, msg, Toast.LENGTH_LONG).show()
+                            statusLabel.text = msg
+                            statusLabel.setTextColor(if (msg.startsWith("מסלול PRO")) Color.parseColor("#14532D") else Color.parseColor("#92400E"))
                         }
                     } catch (e: Exception) {
                         runOnUiThread {
                             Toast.makeText(this@MainActivity, "שגיאה ברענון סטטוס", Toast.LENGTH_SHORT).show()
+                            statusLabel.text = "שגיאה ברענון סטטוס"
+                            statusLabel.setTextColor(Color.parseColor("#7F1D1D"))
                         }
                     }
                 }.start()
@@ -243,6 +256,7 @@ class MainActivity : Activity() {
         layout.addView(upgradeBtn)
         layout.addView(space(10, density))
         layout.addView(refreshBtn)
+        layout.addView(statusLabel)
 
         root.addView(layout)
         setContentView(root)
@@ -316,9 +330,15 @@ class MainActivity : Activity() {
 
     private fun activateFloatingButtonAndMinimize() {
         val prefs = getSharedPreferences("shomer_prefs", Context.MODE_PRIVATE)
+        val phone = (prefs.getString("user_phone", "") ?: "").trim()
+        if (phone.length < 9) {
+            Toast.makeText(this, "אזהרה: מספר טלפון חסר או לא תקין — ההפעלה תימשך אך סטטוס PRO לא יזוהה.", Toast.LENGTH_LONG).show()
+        }
         prefs.edit().putBoolean(FloatingHeadService.PREF_FLOATING_BTN_ENABLED, true).apply()
 
-        val svc = Intent(this, FloatingHeadService::class.java)
+        val svc = Intent(this, FloatingHeadService::class.java).apply {
+            putExtra(FloatingHeadService.EXTRA_FLOATING_BTN_MODE, prefs.getString(FloatingHeadService.PREF_FLOATING_BTN_MODE, "messaging") ?: "messaging")
+        }
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(svc)
