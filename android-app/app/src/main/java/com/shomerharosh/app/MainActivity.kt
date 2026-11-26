@@ -19,9 +19,6 @@ class MainActivity : Activity() {
     private var waitingForOverlayPermission = false
     private var waitingForAccessibilityPermission = false
 
-    // Keep a reference so we can keep it in sync on resume
-    private var floatingBtnSwitch: Switch? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val density = resources.displayMetrics.density
@@ -98,50 +95,73 @@ class MainActivity : Activity() {
             }
         }
 
-        // ── Floating button toggle ────────────────────────────────────────────
-        val toggleLabel = TextView(this).apply {
-            text = "3. כפתור צף פעיל:"
+        // ── Floating button mode ────────────────────────────────────────────
+        val modeLabel = TextView(this).apply {
+            text = "3. מצב כפתור צף:"
             textSize = 17f
             setTypeface(null, Typeface.BOLD)
             setTextColor(Color.parseColor("#0F172A"))
             gravity = Gravity.START
         }
 
-        val toggleRow = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-            setPadding(0, (6 * density).toInt(), 0, (6 * density).toInt())
+        val modeRow = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(0, (6 * density).toInt(), 0, (10 * density).toInt())
         }
 
-        val switchLabel = TextView(this).apply {
-            text = "הצג כפתור רק בוואטסאפ ובהודעות"
-            textSize = 15f
-            setTextColor(Color.parseColor("#475569"))
-            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
-        }
+        val currentMode = prefs.getString(FloatingHeadService.PREF_FLOATING_BTN_MODE, "messaging") ?: "messaging"
+        var selectedModeButton: Button? = null
 
-        val enabledSwitch = Switch(this).apply {
-            isChecked = prefs.getBoolean(FloatingHeadService.PREF_FLOATING_BTN_ENABLED, true)
-            setOnCheckedChangeListener { _, isChecked ->
-                prefs.edit().putBoolean(FloatingHeadService.PREF_FLOATING_BTN_ENABLED, isChecked).apply()
-                if (isChecked) {
-                    // Re-launch the service so it re-reads the pref and shows button if appropriate
-                    activateFloatingButtonAndMinimize()
-                } else {
-                    // Send a disable command to the service — it removes the view immediately
-                    sendDisableCommand()
-                    Toast.makeText(
-                        this@MainActivity,
-                        "הכפתור הצף הוסר מהמסך",
-                        Toast.LENGTH_SHORT
-                    ).show()
+        fun makeModeButton(mode: String, label: String): Button {
+            return Button(this).apply {
+                text = label
+                setTextColor(Color.WHITE)
+                textSize = 15f
+                setTypeface(null, Typeface.BOLD)
+                setPadding(
+                    (12 * density).toInt(), (10 * density).toInt(),
+                    (12 * density).toInt(), (10 * density).toInt()
+                )
+                val selected = mode == currentMode
+                background = GradientDrawable().apply {
+                    cornerRadius = 10 * density
+                    setColor(if (selected) Color.parseColor("#1D4ED8") else Color.parseColor("#CBD5E1"))
+                }
+                setOnClickListener {
+                    prefs.edit().putString(FloatingHeadService.PREF_FLOATING_BTN_MODE, mode).apply()
+                    selectedModeButton?.let { b ->
+                        b.background = GradientDrawable().apply {
+                            cornerRadius = 10 * density
+                            setColor(Color.parseColor("#CBD5E1"))
+                        }
+                    }
+                    background = GradientDrawable().apply {
+                        cornerRadius = 10 * density
+                        setColor(Color.parseColor("#1D4ED8"))
+                    }
+                    selectedModeButton = this
+                    if (mode == "off") {
+                        sendDisableCommand()
+                    } else {
+                        activateFloatingButtonAndMinimize()
+                    }
                 }
             }
         }
-        floatingBtnSwitch = enabledSwitch
 
-        toggleRow.addView(switchLabel)
-        toggleRow.addView(enabledSwitch)
+        val btnAlways = makeModeButton("always", "תמיד דולק")
+        val btnMessaging = makeModeButton("messaging", "רק בוואטסאפ ובהודעות")
+        val btnOff = makeModeButton("off", "כבוי")
+
+        selectedModeButton = when (currentMode) {
+            "always" -> btnAlways
+            "off" -> btnOff
+            else -> btnMessaging
+        }
+
+        modeRow.addView(btnAlways)
+        modeRow.addView(btnMessaging)
+        modeRow.addView(btnOff)
 
         // ── Tip text ──────────────────────────────────────────────────────────
         val tipText = TextView(this).apply {
@@ -197,8 +217,8 @@ class MainActivity : Activity() {
         layout.addView(space(22, density))
         layout.addView(startBtn)
         layout.addView(space(22, density))
-        layout.addView(toggleLabel)
-        layout.addView(toggleRow)
+        layout.addView(modeLabel)
+        layout.addView(modeRow)
         layout.addView(tipText)
         layout.addView(space(22, density))
         layout.addView(upgradeBtn)
@@ -220,11 +240,9 @@ class MainActivity : Activity() {
     override fun onResume() {
         super.onResume()
 
-        // Sync switch state in case permission was revoked externally
+        // Sync mode in case it was changed externally
         val prefs = getSharedPreferences("shomer_prefs", Context.MODE_PRIVATE)
-        val prefEnabled = prefs.getBoolean(FloatingHeadService.PREF_FLOATING_BTN_ENABLED, true)
         val permOk = !needsOverlayPermission()
-        floatingBtnSwitch?.isChecked = prefEnabled && permOk
 
         if (waitingForOverlayPermission) {
             waitingForOverlayPermission = false

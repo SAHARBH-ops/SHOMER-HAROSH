@@ -45,6 +45,9 @@ class FloatingHeadService : Service() {
     private var isDestroyed = false
     private var isFloatingButtonEnabled = true
 
+    // Floating button mode: "always" | "messaging" | "off"
+    @Volatile private var floatingBtnMode: String = "messaging"
+
     // Tracks the last known foreground package so we can decide visibility
     // Written by ScreenCaptureAccessibilityService via notifyForegroundPackage()
     @Volatile private var currentForegroundPackage: String = ""
@@ -84,6 +87,7 @@ class FloatingHeadService : Service() {
         )
 
         const val PREF_FLOATING_BTN_ENABLED = "floating_btn_enabled"
+        const val PREF_FLOATING_BTN_MODE = "floating_btn_mode"
 
         /** Called by ScreenCaptureAccessibilityService on each window change. */
         @Volatile var instance: FloatingHeadService? = null
@@ -105,6 +109,7 @@ class FloatingHeadService : Service() {
         ensureNetworkExecutor()
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
         isFloatingButtonEnabled = readEnabledPref()
+        floatingBtnMode = readModePref()
         startForegroundNotification()
         registerScreenReceiver()
     }
@@ -120,6 +125,7 @@ class FloatingHeadService : Service() {
         isDestroyed = false
         ensureNetworkExecutor()
         isFloatingButtonEnabled = readEnabledPref()
+        floatingBtnMode = readModePref()
         startForegroundNotification()
         registerScreenReceiver()          // idempotent
         evaluateAndUpdateButtonVisibility()
@@ -148,9 +154,11 @@ class FloatingHeadService : Service() {
         // Ignore empty/IME/transient window changes so the button doesn't flicker or hide
         // while the user stays inside a messaging app with a soft keyboard open.
         if (pkg.isBlank()) {
-            // Service gone: treat as non-messaging and hide.
-            currentForegroundPackage = ""
-            handler.post { evaluateAndUpdateButtonVisibility() }
+            // Service gone: treat as non-messaging and hide (unless ALWAYS ON).
+            if (floatingBtnMode != "always") {
+                currentForegroundPackage = ""
+                handler.post { evaluateAndUpdateButtonVisibility() }
+            }
             return
         }
         if (pkg == currentForegroundPackage) return
@@ -160,19 +168,32 @@ class FloatingHeadService : Service() {
     }
 
     /**
+     * Set floating button mode from MainActivity and re-evaluate visibility.
+     */
+    fun setFloatingBtnMode(mode: String) {
+        floatingBtnMode = mode
+        saveModePref(mode)
+        isFloatingButtonEnabled = mode != "off"
+        handler.post { evaluateAndUpdateButtonVisibility() }
+    }
+
+    /**
      * Show/hide the floating button based on:
-     *  1. User toggle pref (isFloatingButtonEnabled)
+     *  1. User mode pref (floatingBtnMode: always / messaging / off)
      *  2. SYSTEM_ALERT_WINDOW permission still granted
-     *  3. Foreground app is in MESSAGING_PACKAGES
+     *  3. Foreground app is in MESSAGING_PACKAGES (only in "messaging" mode)
      */
     private fun evaluateAndUpdateButtonVisibility() {
         if (isDestroyed) return
 
         val permOk = Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
                 Settings.canDrawOverlays(this)
-        val shouldShow = isFloatingButtonEnabled &&
-                permOk &&
-                MESSAGING_PACKAGES.contains(currentForegroundPackage)
+
+        val shouldShow = when (floatingBtnMode) {
+            "off" -> false
+            "always" -> isFloatingButtonEnabled && permOk
+            else -> isFloatingButtonEnabled && permOk && MESSAGING_PACKAGES.contains(currentForegroundPackage)
+        }
 
         if (shouldShow) {
             showFloatingButtonIfNeeded()
@@ -577,4 +598,12 @@ class FloatingHeadService : Service() {
     private fun saveEnabledPref(enabled: Boolean) =
         getSharedPreferences("shomer_prefs", Context.MODE_PRIVATE)
             .edit().putBoolean(PREF_FLOATING_BTN_ENABLED, enabled).apply()
+
+    private fun readModePref(): String =
+        getSharedPreferences("shomer_prefs", Context.MODE_PRIVATE)
+            .getString(PREF_FLOATING_BTN_MODE, "messaging") ?: "messaging"
+
+    private fun saveModePref(mode: String) =
+        getSharedPreferences("shomer_prefs", Context.MODE_PRIVATE)
+            .edit().putString(PREF_FLOATING_BTN_MODE, mode).apply()
 }
