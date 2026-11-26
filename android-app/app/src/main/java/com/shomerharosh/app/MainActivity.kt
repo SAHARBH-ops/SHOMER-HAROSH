@@ -95,6 +95,16 @@ class MainActivity : Activity() {
             }
         }
 
+        // ── Tip text ──────────────────────────────────────────────────────────
+        val tipText = TextView(this).apply {
+            text = "💡 הגדרה חד-פעמית: מאשרים הצגה מעל אפליקציות והפעלה בנגישות.\n" +
+                    "הכפתור יופיע רק בתוך אפליקציות ווטסאפ, הודעות, טלגרם ודומות."
+            textSize = 15f
+            setTextColor(Color.parseColor("#475569"))
+            setPadding(0, (18 * density).toInt(), 0, 0)
+            gravity = Gravity.CENTER
+        }
+
         // ── Floating button mode ────────────────────────────────────────────
         val modeLabel = TextView(this).apply {
             text = "3. מצב כפתור צף:"
@@ -140,6 +150,11 @@ class MainActivity : Activity() {
                         setColor(Color.parseColor("#1D4ED8"))
                     }
                     selectedModeButton = this
+                    tipText.text = when (mode) {
+                        "always" -> "💡 הכפתור הצף תמיד גלוי, בכל האפליקציות."
+                        "off" -> "💡 הכפתור הצף כבוי והוסר מהמסך."
+                        else -> "💡 הכפתור יופיע רק בתוך ווטסאפ, הודעות, טלגרם ודומות."
+                    }
                     if (mode == "off") {
                         sendDisableCommand()
                     } else {
@@ -162,16 +177,6 @@ class MainActivity : Activity() {
         modeRow.addView(btnAlways)
         modeRow.addView(btnMessaging)
         modeRow.addView(btnOff)
-
-        // ── Tip text ──────────────────────────────────────────────────────────
-        val tipText = TextView(this).apply {
-            text = "💡 הגדרה חד-פעמית: מאשרים הצגה מעל אפליקציות והפעלה בנגישות.\n" +
-                    "הכפתור יופיע רק בתוך אפליקציות ווטסאפ, הודעות, טלגרם ודומות."
-            textSize = 15f
-            setTextColor(Color.parseColor("#475569"))
-            setPadding(0, (18 * density).toInt(), 0, 0)
-            gravity = Gravity.CENTER
-        }
 
         val upgradeBtn = makeButton("שדרג ל-PRO — לחץ כאן", "#7C3AED", density).apply {
             setOnClickListener {
@@ -196,7 +201,21 @@ class MainActivity : Activity() {
                         val body = conn.inputStream.bufferedReader().use { it.readText() }
                         conn.disconnect()
                         runOnUiThread {
-                            Toast.makeText(this@MainActivity, body, Toast.LENGTH_LONG).show()
+                            val msg = try {
+                                val json = org.json.JSONObject(body)
+                                val plan = json.optString("plan", "FREE")
+                                val used = json.optInt("used", 0)
+                                val limit = json.optInt("limit", 0)
+                                val remaining = json.optInt("remaining", 0)
+                                if (plan.equals("PRO", ignoreCase = true)) {
+                                    "מסלול PRO פעיל — נותרו $remaining מתוך $limit סריקות החודש."
+                                } else {
+                                    "מסלול חינמי — נותרו $remaining מתוך $limit סריקות החודש."
+                                }
+                            } catch (e: Exception) {
+                                "לא ניתן לקרוא את סטטוס המנוי מהשרת."
+                            }
+                            Toast.makeText(this@MainActivity, msg, Toast.LENGTH_LONG).show()
                         }
                     } catch (e: Exception) {
                         runOnUiThread {
@@ -239,10 +258,6 @@ class MainActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
-
-        // Sync mode in case it was changed externally
-        val prefs = getSharedPreferences("shomer_prefs", Context.MODE_PRIVATE)
-        val permOk = !needsOverlayPermission()
 
         if (waitingForOverlayPermission) {
             waitingForOverlayPermission = false

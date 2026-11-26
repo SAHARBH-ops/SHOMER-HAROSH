@@ -95,7 +95,7 @@ class ScreenCaptureAccessibilityService : AccessibilityService() {
                             return
                         }
 
-                        val maxW = 650
+                        val maxW = 900
                         scaled = if (bitmap.width > maxW) {
                             val ratio = maxW.toFloat() / bitmap.width
                             Bitmap.createScaledBitmap(
@@ -109,7 +109,7 @@ class ScreenCaptureAccessibilityService : AccessibilityService() {
                         }
 
                         val out = ByteArrayOutputStream()
-                        scaled.compress(Bitmap.CompressFormat.JPEG, 75, out)
+                        scaled.compress(Bitmap.CompressFormat.JPEG, 85, out)
                         val base64 = Base64.encodeToString(out.toByteArray(), Base64.NO_WRAP)
                         onResult(base64)
                     } catch (_: Exception) {
